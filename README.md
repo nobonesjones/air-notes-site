@@ -19,11 +19,11 @@ python3 -m http.server 4321
 |---|---|
 | `index.html` | All content and structure. Copy lives here. |
 | `styles.css` | Design tokens at the top (`:root`), then components. Night/dusk glass + day paper styles. |
-| `app.js` | The motion engine — one rAF loop drives the scroll-linked sky colour (OKLab interpolation), starfield canvas, and pointer parallax. IntersectionObservers drive reveals, the sticky-phone screen swaps, and counters. |
+| `app.js` | The motion engine. One rAF loop drives the scroll linked sky colour, the context convergence canvas, and pointer parallax. IntersectionObservers drive reveals, the sticky phone screen swaps, and counters. |
 
 ## The concept — "night sky to paper"
 
-One scroll, three acts: night hero → the sky literally brightens through dawn into warm paper for the product sections → dusk returns for the closing CTA. The background colour is interpolated in OKLab per-frame from scroll position (see `skyAt()` in `app.js`); stars and aurora fade with it.
+One scroll, three acts: night hero → the sky literally brightens through dawn into warm paper for the product sections → dusk returns for the closing CTA. The background colour is interpolated in OKLab per frame from scroll position (see `skyAt()` in `app.js`); the context flow and aurora fade with it.
 
 ## Rules if you're editing
 

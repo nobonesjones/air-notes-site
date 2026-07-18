@@ -55,7 +55,12 @@ body {
   background: radial-gradient(120% 90% at 50% 0%, rgba(255,255,255,.05), transparent 55%);
 }
 
-#stars { position: fixed; inset: 0; z-index: -2; pointer-events: none; }
+#contextFlow {
+  position: fixed; inset: 0; z-index: -2; pointer-events: none;
+  width: 100vw; height: 100vh;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 2%, #000 14%, #000 88%, transparent 100%);
+          mask-image: linear-gradient(to bottom, transparent 2%, #000 14%, #000 88%, transparent 100%);
+}
 
 .aurora { position: fixed; inset: 0; z-index: -2; pointer-events: none; overflow: hidden; }
 .aurora i {
@@ -149,13 +154,6 @@ h2 { font-size: clamp(2rem, 4vw, 3.25rem); line-height: 1.12; margin-bottom: 22p
 @keyframes sweep { 0% { left: -50%; opacity: 0; } 12% { opacity: 1; } 100% { left: 120%; opacity: 0; } }
 .btn:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid #7FA6C7; outline-offset: 3px; }
 
-.ghost-link {
-  color: rgba(245,241,230,.78); text-decoration: none; font-size: 15.5px;
-  border-bottom: 1px solid rgba(245,241,230,.25); padding-bottom: 2px;
-  transition: color .3s var(--ease), border-color .3s var(--ease);
-}
-.ghost-link:hover { color: var(--cream); border-color: rgba(245,241,230,.6); }
-
 /* ---------- reveals ---------- */
 .reveal { opacity: 0; transform: translateY(26px); transition: opacity .8s var(--ease), transform .8s var(--ease); }
 .reveal.in { opacity: 1; transform: none; }
@@ -176,17 +174,20 @@ h2 { font-size: clamp(2rem, 4vw, 3.25rem); line-height: 1.12; margin-bottom: 22p
   text-align: center; padding: 150px 0 120px;
 }
 .hero .sub {
-  max-width: 34em; margin: 26px auto 38px;
+  max-width: 34em; margin: 26px auto 0;
   font-size: clamp(1.02rem, 1.6vw, 1.2rem);
   color: rgba(245,241,230,.75);
 }
-.hero .cta-row { display: flex; align-items: center; justify-content: center; gap: 26px; flex-wrap: wrap; }
+.hero .cta-row {
+  display: flex; align-items: center; justify-content: center;
+  margin-top: clamp(96px, 12vh, 116px);
+}
 
 .clouds {
-  position: absolute; left: 0; right: 0; bottom: -6vh; height: 34vh;
+  position: absolute; inset: 0 0 auto; height: 100svh;
   pointer-events: none; overflow: hidden;
-  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 45%);
-          mask-image: linear-gradient(to bottom, transparent, #000 45%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 28%, #000 72%, #000 90%, transparent 100%);
+          mask-image: linear-gradient(to bottom, transparent 28%, #000 72%, #000 90%, transparent 100%);
   opacity: .5;
 }
 .clouds i {

@@ -1,6 +1,6 @@
 /* ============================================================
    Air Notes — motion engine
-   One rAF loop drives: sky interpolation (OKLab), starfield,
+   One rAF loop drives: sky interpolation (OKLab), context flow,
    parallax. IntersectionObserver drives reveals, phone states,
    counters. One easing family. Everything slow.
    ============================================================ */
@@ -33,27 +33,69 @@
   const NIGHT_DEEP = hex2lab('#0A1220'), NIGHT = hex2lab('#0F2438'),
         DAWN = hex2lab('#2E4A63'), PAPER = hex2lab('#F5F1E6');
 
-  /* ---------- starfield ---------- */
-  const canvas = $('#stars'), ctx = canvas.getContext('2d');
-  let stars = [], W = 0, H = 0, dpr = 1;
-  function seedStars() {
+  /* ---------- context convergence field ---------- */
+  const canvas = $('#contextFlow'), ctx = canvas.getContext('2d');
+  let paths = [], packets = [], W = 0, H = 0, dpr = 1;
+  let focus = { x: 0, y: 0 };
+
+  const fract = n => n - Math.floor(n);
+  const seeded = n => fract(Math.sin(n * 91.731) * 43758.5453);
+  const cubicPoint = (p0, p1, p2, p3, t) => {
+    const m = 1 - t, m2 = m * m, t2 = t * t;
+    return {
+      x: m2 * m * p0.x + 3 * m2 * t * p1.x + 3 * m * t2 * p2.x + t2 * t * p3.x,
+      y: m2 * m * p0.y + 3 * m2 * t * p1.y + 3 * m * t2 * p2.y + t2 * t * p3.y
+    };
+  };
+  const pointOnPath = (path, t) => {
+    if (t < .68) return cubicPoint(...path.incoming, t / .68);
+    return cubicPoint(...path.outgoing, (t - .68) / .32);
+  };
+
+  function seedFlow() {
     dpr = Math.min(devicePixelRatio || 1, 2);
     W = innerWidth; H = innerHeight;
     canvas.width = W * dpr; canvas.height = H * dpr;
     canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    const n = Math.min(230, Math.round(W * H / 6500));
-    stars = Array.from({ length: n }, () => ({
-      x: Math.random() * W, y: Math.random() * H,
-      r: Math.random() < .82 ? .7 + Math.random() * .5 : 1.1 + Math.random() * .8,
-      depth: Math.random() < .5 ? 1 : Math.random() < .8 ? 2 : 3,   // parallax layers
-      speed: .0035 + Math.random() * .008,                          // slow drift
-      a: .25 + Math.random() * .6,
-      tw: .5 + Math.random() * 1.2, ph: Math.random() * Math.PI * 2
+    const lineCount = W < 640 ? 28 : 52;
+    focus = { x: W * .5, y: H * (W < 640 ? .56 : .52) };
+    paths = Array.from({ length: lineCount }, (_, i) => {
+      const n = i / (lineCount - 1);
+      const startTop = W < 640 ? .14 : .1;
+      const startSpread = W < 640 ? .72 : .8;
+      const startY = (startTop + n * startSpread) * H;
+      const lane = (i - (lineCount - 1) / 2) * (W < 640 ? .2 : .34);
+      const joinY = focus.y + lane * .12;
+      const endY = focus.y + lane;
+      const join = { x: focus.x, y: joinY };
+      return {
+        incoming: [
+          { x: -W * .08, y: startY },
+          { x: W * .14, y: startY },
+          { x: focus.x - W * .19, y: focus.y + (startY - focus.y) * .12 },
+          join
+        ],
+        outgoing: [
+          join,
+          { x: focus.x + W * .12, y: focus.y + lane * .72 },
+          { x: W * .78, y: endY },
+          { x: W * 1.08, y: endY }
+        ]
+      };
+    });
+
+    const packetCount = W < 640 ? 20 : 38;
+    packets = Array.from({ length: packetCount }, (_, i) => ({
+      path: Math.floor(seeded(i + 4) * lineCount),
+      t: seeded(i + 18),
+      speed: .035 + seeded(i + 33) * .035,
+      length: 3 + seeded(i + 51) * 9,
+      alpha: .45 + seeded(i + 78) * .5
     }));
   }
-  seedStars();
-  addEventListener('resize', seedStars);
+  seedFlow();
+  addEventListener('resize', seedFlow);
 
   /* ---------- pointer parallax (throttled + eased) ---------- */
   let tx = 0, ty = 0, px = 0, py = 0;
@@ -81,26 +123,84 @@
   addEventListener('resize', () => { measure(); });
 
   const clamp01 = v => Math.max(0, Math.min(1, v));
-  let starAlpha = 1, skyState = { color: 'rgb(10,18,32)', day: false };
+  let flowAlpha = 1, skyState = { color: 'rgb(10,18,32)', day: false };
 
   function skyAt(sy) {
     const a = anchors;
     if (sy < a.dawnStart) {                       // deep night, slight lift with scroll
       const t = clamp01(sy / Math.max(1, a.dawnStart));
-      return { c: mixLab(NIGHT_DEEP, NIGHT, t * .6), stars: 1, aur: 1, grain: .03, day: false };
+      return { c: mixLab(NIGHT_DEEP, NIGHT, t * .6), flow: 1, aur: 1, grain: .03, day: false };
     }
     if (sy < a.dayFull) {                          // dawn: night -> dawn -> paper
       const t = clamp01((sy - a.dawnStart) / (a.dayFull - a.dawnStart));
       const c = t < .45 ? mixLab(NIGHT, DAWN, t / .45) : mixLab(DAWN, PAPER, (t - .45) / .55);
-      return { c, stars: 1 - clamp01(t * 1.6), aur: 1 - t, grain: .03 - t * .01, day: t > .6 };
+      return { c, flow: 1 - clamp01(t * 1.6), aur: 1 - t, grain: .03 - t * .01, day: t > .6 };
     }
     if (sy < a.duskStart) {                        // full day
-      return { c: 'rgb(245,241,230)', stars: 0, aur: 0, grain: .02, day: true };
+      return { c: 'rgb(245,241,230)', flow: 0, aur: 0, grain: .02, day: true };
     }
-    // dusk: paper -> night, stars gently returning
+    // dusk: paper -> night
     const t = clamp01((sy - a.duskStart) / Math.max(1, a.duskFull - a.duskStart));
     const c = t < .5 ? mixLab(PAPER, DAWN, t / .5) : mixLab(DAWN, NIGHT, (t - .5) / .5);
-    return { c, stars: clamp01((t - .35) * .9), aur: t * .35, grain: .02 + t * .01, day: t < .4 };
+    return { c, flow: 0, aur: t * .35, grain: .02 + t * .01, day: t < .4 };
+  }
+
+  function drawFlow(dt) {
+    ctx.clearRect(0, 0, W, H);
+    if (flowAlpha <= .01) return;
+
+    ctx.save();
+    ctx.globalAlpha = flowAlpha;
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = 'rgba(174, 197, 214, .12)';
+    for (const path of paths) {
+      ctx.beginPath();
+      ctx.moveTo(path.incoming[0].x, path.incoming[0].y);
+      ctx.bezierCurveTo(path.incoming[1].x, path.incoming[1].y, path.incoming[2].x, path.incoming[2].y, path.incoming[3].x, path.incoming[3].y);
+      ctx.bezierCurveTo(path.outgoing[1].x, path.outgoing[1].y, path.outgoing[2].x, path.outgoing[2].y, path.outgoing[3].x, path.outgoing[3].y);
+      ctx.stroke();
+    }
+
+    for (const packet of packets) {
+      if (!reduced) packet.t = (packet.t + packet.speed * dt / 1000) % 1;
+      const p = pointOnPath(paths[packet.path], packet.t);
+      const ahead = pointOnPath(paths[packet.path], Math.min(.999, packet.t + .004));
+      const angle = Math.atan2(ahead.y - p.y, ahead.x - p.x);
+      ctx.save();
+      ctx.translate(p.x + px * 3, p.y + py * 2);
+      ctx.rotate(angle);
+      ctx.globalAlpha = flowAlpha * packet.alpha;
+      ctx.fillStyle = '#D8844E';
+      ctx.shadowColor = 'rgba(216,132,78,.75)';
+      ctx.shadowBlur = 8;
+      ctx.beginPath();
+      ctx.roundRect(-packet.length / 2, -1, packet.length, 2, 1);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    // The central anchor makes the convergence legible without competing with the hero copy.
+    ctx.globalAlpha = flowAlpha;
+    ctx.shadowBlur = 0;
+    ctx.strokeStyle = 'rgba(245,241,230,.48)';
+    ctx.fillStyle = 'rgba(245,241,230,.72)';
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.arc(focus.x, focus.y, 8, 0, Math.PI * 2); ctx.stroke();
+    ctx.beginPath(); ctx.arc(focus.x, focus.y, 2, 0, Math.PI * 2); ctx.fill();
+    ctx.font = '500 9px Inter, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillStyle = 'rgba(245,241,230,.54)';
+    ctx.fillText('AIR NOTES', focus.x, focus.y + 25);
+
+    if (W >= 760) {
+      ctx.font = '500 8px Inter, sans-serif';
+      ctx.textAlign = 'left';
+      ctx.fillStyle = 'rgba(245,241,230,.28)';
+      ['MEETINGS', 'VOICE NOTES', 'MESSAGES', 'IDEAS'].forEach((label, i) => {
+        ctx.fillText(label, 24, H * (.27 + i * .17));
+      });
+    }
+    ctx.restore();
   }
 
   /* ---------- master rAF loop ---------- */
@@ -117,7 +217,7 @@
     if (s.day !== skyState.day) { document.body.classList.toggle('is-day', s.day); skyState.day = s.day; }
     aurora.style.opacity = s.aur.toFixed(3);
     grain.style.opacity = s.grain.toFixed(3);
-    starAlpha = s.stars;
+    flowAlpha = s.flow;
 
     // aurora + parallax depths (max 12px)
     if (!reduced) {
@@ -126,25 +226,7 @@
       aurora.style.setProperty('--px3', (px * 12) + 'px'); aurora.style.setProperty('--py3', (py * 8) + 'px');
     }
 
-    // stars
-    ctx.clearRect(0, 0, W, H);
-    if (starAlpha > .01) {
-      const t = now / 1000;
-      for (const st of stars) {
-        if (!reduced) {
-          st.x += st.speed * st.depth * dt * .06;
-          if (st.x > W + 4) st.x = -4;
-        }
-        const tw = reduced ? 1 : (.65 + .35 * Math.sin(t * st.tw + st.ph));
-        ctx.globalAlpha = st.a * tw * starAlpha;
-        ctx.fillStyle = '#EAF0F6';
-        const ox = reduced ? 0 : px * 4 * st.depth, oy = reduced ? 0 : py * 3 * st.depth;
-        ctx.beginPath();
-        ctx.arc(st.x + ox, st.y + oy, st.r, 0, 7);
-        ctx.fill();
-      }
-      ctx.globalAlpha = 1;
-    }
+    drawFlow(dt);
     requestAnimationFrame(frame);
   }
   requestAnimationFrame(frame);
