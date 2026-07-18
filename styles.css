@@ -175,6 +175,18 @@ h2 { font-size: clamp(2rem, 4vw, 3.25rem); line-height: 1.12; margin-bottom: 22p
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   text-align: center; padding: 150px 0 120px;
 }
+.badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--sans); font-size: 12.5px; font-weight: 500;
+  color: rgba(245,241,230,.85);
+  border: 1px solid rgba(255,255,255,.18); border-radius: 999px;
+  padding: 6px 16px; margin-bottom: 20px;
+  background: rgba(255,255,255,.04);
+}
+.kicker {
+  font-family: var(--serif); font-style: italic; font-size: 16px;
+  color: rgba(245,241,230,.65); margin-bottom: 10px;
+}
 .hero .sub {
   max-width: 34em; margin: 26px auto 38px;
   font-size: clamp(1.02rem, 1.6vw, 1.2rem);
@@ -197,6 +209,51 @@ h2 { font-size: clamp(2rem, 4vw, 3.25rem); line-height: 1.12; margin-bottom: 22p
 .clouds .c2 { width: 48vw; height: 15vh; left: 30vw;  bottom: -6vh; animation: cloud-drift 52s linear infinite alternate-reverse; }
 .clouds .c3 { width: 55vw; height: 16vh; right: -12vw; bottom: -3vh; animation: cloud-drift 46s linear infinite alternate; }
 @keyframes cloud-drift { from { transform: translateX(0); } to { transform: translateX(9vw); } }
+
+/* ============================================================
+   THE IDEA — everything into Claude
+   ============================================================ */
+.capture-inner { text-align: center; }
+.capture .eyebrow { text-align: center; }
+.capture h2 { color: var(--cream); max-width: 18em; margin-left: auto; margin-right: auto; }
+.capture .copy { color: rgba(245,241,230,.75); max-width: 34em; margin: 0 auto; font-size: clamp(1rem, 1.4vw, 1.13rem); }
+
+.orbit { position: relative; width: 340px; height: 340px; margin: 64px auto 28px; }
+@media (max-width: 720px) { .orbit { transform: scale(.72); margin: 40px auto 12px; } }
+
+.orbit-core {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: 108px; height: 108px; border-radius: 50%;
+  background: var(--night); border: 1px solid rgba(255,255,255,.16);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--serif); font-size: 17px; color: var(--cream);
+  box-shadow: var(--shadow-soft), inset 0 1px 0 rgba(255,255,255,.16);
+  z-index: 2;
+}
+.orbit-core::after {
+  content: ""; position: absolute; inset: -30px; border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(234,240,246,.16), transparent 72%);
+  animation: orbit-glow 5s var(--ease) infinite;
+  z-index: -1;
+}
+@keyframes orbit-glow {
+  0%, 100% { transform: scale(1); opacity: .7; }
+  50%      { transform: scale(1.15); opacity: 1; }
+}
+
+.orbit-chip {
+  position: absolute; top: 50%; left: 50%;
+  font-size: 12px; padding: 6px 14px; border-radius: 999px; white-space: nowrap;
+  animation: orbit-in 12s var(--ease) infinite;
+}
+@keyframes orbit-in {
+  0%   { transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(1); opacity: 0; }
+  10%  { opacity: .95; }
+  75%  { opacity: .95; }
+  100% { transform: translate(-50%, -50%) scale(.3); opacity: 0; }
+}
+
+.orbit-caption { font-size: 14px; color: rgba(245,241,230,.55); margin-top: 4px; }
 
 /* ============================================================
    THE PHONE — pure CSS
@@ -391,4 +448,10 @@ footer a:hover { color: var(--cream); }
   .aurora i, .clouds i, .phone-wrap.levitate { animation: none !important; }
   .reveal, .word { transition-duration: .3s; transform: none; }
   .btn .sweep { display: none; }
+  .orbit-core::after { animation: none !important; }
+  .orbit-chip {
+    animation: none !important;
+    transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(1);
+    opacity: .95;
+  }
 }
