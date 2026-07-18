@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Air Notes — Capture everything. Ask anything.</title>
+<meta name="description" content="Meetings, voice notes, half-formed ideas — recorded, organised into your days, and remembered forever by your AI.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;1,8..60,400&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- atmosphere -->
+<div class="sky" id="sky" aria-hidden="true"></div>
+<canvas id="stars" aria-hidden="true"></canvas>
+<div class="aurora" id="aurora" aria-hidden="true"><i class="a1"></i><i class="a2"></i><i class="a3"></i></div>
+<div class="grain" id="grain" aria-hidden="true"></div>
+
+<!-- nav -->
+<nav class="nav" aria-label="Main">
+  <a class="wordmark" href="#top">Air Notes</a>
+  <a class="nav-cta" href="#cta">Get early access</a>
+</nav>
+
+<main id="top">
+
+  <!-- ================= ACT I — HERO ================= -->
+  <header class="hero" id="hero">
+    <div class="wrap">
+      <h1 id="h1">Capture everything. Ask anything.</h1>
+      <p class="sub reveal d2">Meetings, voice notes, half-formed ideas — recorded, organised into your days, and remembered forever by your AI.</p>
+      <div class="cta-row reveal d3">
+        <a class="btn btn-cream magnetic" href="#cta">Get early access<span class="sweep"></span></a>
+        <a class="ghost-link" href="#s1">See how it works ↓</a>
+      </div>
+
+      <div class="phone-wrap levitate reveal d3">
+        <div class="phone" role="img" aria-label="Air Notes app — the Today feed: your captures organised into your day">
+          <span class="island"></span>
+          <div class="screen">
+            <!-- state 1: Today feed -->
+            <div class="pscreen active" data-state="feed">
+              <div class="p-day-title">Today</div>
+              <div class="p-date">Friday 18 July · 4 captures</div>
+              <div class="p-card">
+                <div class="t"><b>Meeting with Toby — offplan stock</b><time>2:41 pm</time></div>
+                <p>Handover moves to the 24th; plans due Friday.</p>
+                <div class="p-chips"><span class="chip ochre">Savills</span><span class="chip slate">Toby</span><span class="p-min">18 min</span></div>
+              </div>
+              <div class="p-card">
+                <div class="t"><b>Idea — pricing page</b><time>11:20 am</time></div>
+                <p>Anchor annual. Trial copy: free for friends.</p>
+              </div>
+              <div class="p-card">
+                <div class="t"><b>WhatsApp — Zofia</b><time>9:04 am</time></div>
+                <p>Contract notes forwarded in.</p>
+              </div>
+              <div class="p-askbar">
+                <span>Ask anything</span>
+                <span class="p-rec"><svg fill="none" stroke-width="1.8" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3" stroke-linecap="round"/></svg></span>
+              </div>
+            </div>
+            <!-- state 2: processed recording -->
+            <div class="pscreen" data-state="processed">
+              <div class="p-proc-title">Meeting with Toby — offplan stock</div>
+              <div class="p-meta">Friday 18 July · 2:41 pm · 18 min</div>
+              <div class="p-chips"><span class="chip ochre">Savills</span><span class="chip slate">Toby</span></div>
+              <div class="p-tldr">Handover confirmed for the 24th. Revised floor plans to Toby before Friday; deposit terms unchanged.</div>
+              <div class="p-sec">Decisions</div>
+              <div class="p-li">• Handover moves to the 24th</div>
+              <div class="p-li">• Keys through the agency</div>
+              <div class="p-sec">Follow-ups</div>
+              <div class="p-li">• Send revised floor plans — Fri</div>
+              <div class="p-li">• Confirm handover time</div>
+              <div class="p-share">Share</div>
+            </div>
+            <!-- state 3: ask-anything answer -->
+            <div class="pscreen" data-state="ask">
+              <div class="p-day-title" style="font-size:19px">Ask</div>
+              <div class="p-q">What did Toby ask me to send?</div>
+              <div class="p-a">The revised floor plans — before Friday. From your handover call on the 18th. Deposit terms stay as agreed.</div>
+              <div class="p-src">Sources</div>
+              <div class="p-chips"><span class="chip ochre">Handover call · 18 Jul</span><span class="chip slate">Site visit · 15 Jul</span></div>
+              <div class="p-askbar"><span>Ask a follow-up…</span><span class="p-rec"><svg fill="none" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 19V6M6 12l6-6 6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="clouds" aria-hidden="true"><i class="c1"></i><i class="c2"></i><i class="c3"></i></div>
+  </header>
+
+  <!-- ================= ACT II — DAY ================= -->
+  <div class="act2" id="act2">
+    <div class="wrap act2-grid">
+      <div class="benefit-col">
+
+        <section class="benefit" id="s1" data-phone="processed">
+          <p class="eyebrow reveal d1">The meeting ends. The work is done.</p>
+          <h2 class="reveal d2">Walk out with perfect notes — without writing any.</h2>
+          <p class="copy reveal d3">Tap record, put your phone on the table, forget it exists. When you're done, Air Notes hands you the title, the summary, the decisions and the follow-ups. Yours to edit, share or send in one tap.</p>
+          <div class="phone-inline reveal d3">
+            <div class="phone" role="img" aria-label="A processed recording — title, summary, decisions and follow-ups, ready to share">
+              <span class="island"></span>
+              <div class="screen">
+                <div class="pscreen active">
+                  <div class="p-proc-title">Meeting with Toby — offplan stock</div>
+                  <div class="p-meta">Friday 18 July · 2:41 pm · 18 min</div>
+                  <div class="p-chips"><span class="chip ochre">Savills</span><span class="chip slate">Toby</span></div>
+                  <div class="p-tldr">Handover confirmed for the 24th. Revised floor plans to Toby before Friday.</div>
+                  <div class="p-sec">Follow-ups</div>
+                  <div class="p-li">• Send revised floor plans — Fri</div>
+                  <div class="p-li">• Confirm handover time</div>
+                  <div class="p-share">Share</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="benefit" id="s2" data-phone="feed">
+          <h2 class="reveal d1">Your second brain lives in WhatsApp.</h2>
+          <p class="copy reveal d2">Message it a thought. Voice-note it from the car. Forward the important stuff. It replies "Captured ✓" and files everything into your day — no app open, no friction, no lost ideas.</p>
+          <div class="chat-card reveal d3" role="img" aria-label="A chat with Air Notes: a forwarded thought and a voice note, each confirmed as captured and filed">
+            <div class="bub out">meeting with toby moved to tuesday</div>
+            <div class="bub in-b"><span class="tick">Captured ✓</span> — filed to Savills</div>
+            <div class="bub out voice">
+              <svg width="14" height="14" fill="none" stroke="#44603F" stroke-width="1.8" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              <span class="bars"><i style="height:6px"></i><i style="height:12px"></i><i style="height:9px"></i><i style="height:14px"></i><i style="height:7px"></i><i style="height:11px"></i><i style="height:5px"></i><i style="height:9px"></i></span>
+              <span style="font-size:12px;opacity:.7">0:42</span>
+            </div>
+            <div class="bub in-b"><span class="tick">Captured ✓</span> — added to today</div>
+          </div>
+        </section>
+
+        <section class="benefit" id="s3" data-phone="ask">
+          <h2 class="reveal d1">Finally, an AI with your memory.</h2>
+          <p class="copy reveal d2">Connect Air Notes to Claude once. From then on, ask it anything about anything you've ever captured — "What did Toby ask me to send?" — and it answers from your real life, not a blank slate.</p>
+          <div class="chat-card reveal d3" role="img" aria-label="A question answered from your own captures, with the source recordings shown beneath">
+            <div class="bub out">What did Toby ask me to send?</div>
+            <div class="bub in-b">The revised floor plans — before Friday. From your handover call on the 18th. Deposit terms stay as agreed.</div>
+            <div class="src-chips"><span class="chip ochre">Handover call · 18 Jul</span><span class="chip slate">Site visit · 15 Jul</span></div>
+          </div>
+        </section>
+
+      </div>
+
+      <div class="phone-col" aria-hidden="true">
+        <div class="phone-wrap">
+          <div class="phone">
+            <span class="island"></span>
+            <div class="screen" id="stickyScreen">
+              <div class="pscreen active" data-state="feed">
+                <div class="p-day-title">Today</div>
+                <div class="p-date">Friday 18 July · 4 captures</div>
+                <div class="p-card">
+                  <div class="t"><b>Meeting with Toby — offplan stock</b><time>2:41 pm</time></div>
+                  <p>Handover moves to the 24th; plans due Friday.</p>
+                  <div class="p-chips"><span class="chip ochre">Savills</span><span class="chip slate">Toby</span><span class="p-min">18 min</span></div>
+                </div>
+                <div class="p-card">
+                  <div class="t"><b>Idea — pricing page</b><time>11:20 am</time></div>
+                  <p>Anchor annual. Trial copy: free for friends.</p>
+                </div>
+                <div class="p-askbar">
+                  <span>Ask anything</span>
+                  <span class="p-rec"><svg fill="none" stroke-width="1.8" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3" stroke-linecap="round"/></svg></span>
+                </div>
+              </div>
+              <div class="pscreen" data-state="processed">
+                <div class="p-proc-title">Meeting with Toby — offplan stock</div>
+                <div class="p-meta">Friday 18 July · 2:41 pm · 18 min</div>
+                <div class="p-chips"><span class="chip ochre">Savills</span><span class="chip slate">Toby</span></div>
+                <div class="p-tldr">Handover confirmed for the 24th. Revised floor plans to Toby before Friday; deposit terms unchanged.</div>
+                <div class="p-sec">Decisions</div>
+                <div class="p-li">• Handover moves to the 24th</div>
+                <div class="p-li">• Keys through the agency</div>
+                <div class="p-sec">Follow-ups</div>
+                <div class="p-li">• Send revised floor plans — Fri</div>
+                <div class="p-li">• Confirm handover time</div>
+                <div class="p-share">Share</div>
+              </div>
+              <div class="pscreen" data-state="ask">
+                <div class="p-day-title" style="font-size:19px">Ask</div>
+                <div class="p-q">What did Toby ask me to send?</div>
+                <div class="p-a">The revised floor plans — before Friday. From your handover call on the 18th. Deposit terms stay as agreed.</div>
+                <div class="p-src">Sources</div>
+                <div class="p-chips"><span class="chip ochre">Handover call · 18 Jul</span><span class="chip slate">Site visit · 15 Jul</span></div>
+                <div class="p-askbar"><span>Ask a follow-up…</span><span class="p-rec"><svg fill="none" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 19V6M6 12l6-6 6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- pull-quote -->
+    <div class="wrap pullquote-block">
+      <p class="pullquote reveal d1">It's the difference between an assistant who just met you — <span class="mark">and one who's been in every meeting you've ever had.</span></p>
+    </div>
+
+    <!-- proof strip -->
+    <section class="proof">
+      <div class="wrap">
+        <div class="strip">
+          <div class="stat reveal d1"><div class="num"><span data-count="3">0</span><small>sec</small></div><div class="lbl">to capture a thought</div></div>
+          <div class="stat reveal d2"><div class="num"><span data-count="0">0</span><small>bots</small></div><div class="lbl">joining your calls</div></div>
+          <div class="stat reveal d3"><div class="num"><span data-count="1">0</span><small>place</small></div><div class="lbl">for everything you know</div></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ================= ACT III — DUSK CTA ================= -->
+  <section class="cta" id="cta">
+    <div class="wrap">
+      <h2 class="reveal d1">Stop taking notes. Start remembering everything.</h2>
+      <div class="cta-card reveal d2">
+        <form class="cta-form" id="ctaForm" novalidate>
+          <label for="email" class="visually-hidden" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Email address</label>
+          <input type="email" id="email" name="email" placeholder="you@work.com" autocomplete="email" required>
+          <button type="submit" class="btn btn-cream magnetic" id="ctaBtn"><span class="btn-label">Get early access</span><span class="sweep"></span></button>
+        </form>
+        <p class="cta-micro">Free for early users. iPhone first.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">Air Notes — © 2026 · <a href="#">Privacy</a> · <a href="#">Terms</a></div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
