@@ -1,5 +1,5 @@
 /* ============================================================
-   Air Notes — one-page marketing site
+   Air Note — one-page marketing site
    Night sky → paper → dusk. One easing family. Quiet luxury.
    ============================================================ */
 
@@ -380,10 +380,90 @@ h2 { font-size: clamp(2rem, 4vw, 3.25rem); line-height: 1.12; margin-bottom: 22p
 .cta-form .btn { white-space: nowrap; }
 .cta-micro { margin-top: 16px; font-size: 13px; color: rgba(245,241,230,.55); }
 
-/* footer */
-footer { padding: 30px 0 44px; text-align: center; font-size: 12.5px; color: rgba(245,241,230,.45); }
-footer a { color: rgba(245,241,230,.55); text-decoration: none; }
-footer a:hover { color: var(--cream); }
+/* ============================================================
+   RESOURCE HUB + FOOTER
+   ============================================================ */
+.resources {
+  padding: 130px 0 110px;
+  background: rgba(7,15,26,.36);
+  border-top: 1px solid rgba(255,255,255,.09);
+}
+.resource-head {
+  display: grid; grid-template-columns: minmax(0,1.1fr) minmax(280px,.7fr);
+  gap: 80px; align-items: end; margin-bottom: 76px;
+}
+.resource-head h2 { max-width: 12em; margin-bottom: 0; color: var(--cream); }
+.resources .eyebrow, .faq .eyebrow { color: rgba(245,241,230,.48); }
+.resource-summary { color: rgba(245,241,230,.64); max-width: 31em; font-size: 16px; }
+.resource-groups {
+  display: grid; grid-template-columns: repeat(3,minmax(0,1fr));
+  border-top: 1px solid rgba(255,255,255,.14);
+  border-bottom: 1px solid rgba(255,255,255,.14);
+}
+.resource-group { padding: 34px 30px 36px; border-left: 1px solid rgba(255,255,255,.11); }
+.resource-group:first-child { padding-left: 0; border-left: 0; }
+.resource-group:last-child { padding-right: 0; }
+.resource-group h3 {
+  margin-bottom: 24px; color: rgba(245,241,230,.46);
+  font-size: 11px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase;
+}
+.resource-group a {
+  display: block; padding: 18px 0; border-top: 1px solid rgba(255,255,255,.09);
+  color: var(--cream); text-decoration: none;
+}
+.resource-group a:first-of-type { border-top: 0; }
+.resource-group strong {
+  display: block; margin-bottom: 7px;
+  font-family: var(--serif); font-size: 21px; font-weight: 400; line-height: 1.2;
+  transition: color .25s var(--ease);
+}
+.resource-group span { display: block; color: rgba(245,241,230,.5); font-size: 13px; line-height: 1.55; }
+.resource-group a:hover strong { color: #E6A27B; }
+
+.faq { padding: 120px 0 130px; background: rgba(7,15,26,.58); }
+.faq-layout { display: grid; grid-template-columns: minmax(220px,.65fr) minmax(0,1.35fr); gap: 96px; align-items: start; }
+.faq-intro { position: sticky; top: 120px; }
+.faq-intro h2 { margin-bottom: 0; color: var(--cream); }
+.faq-list { border-top: 1px solid rgba(255,255,255,.14); }
+.faq-item {
+  display: grid; grid-template-columns: minmax(180px,.7fr) minmax(0,1fr);
+  gap: 42px; padding: 30px 0 32px; border-bottom: 1px solid rgba(255,255,255,.14);
+  scroll-margin-top: 110px;
+}
+.faq-item h3 { color: var(--cream); font-family: var(--serif); font-size: 20px; font-weight: 400; line-height: 1.35; }
+.faq-item p { color: rgba(245,241,230,.58); font-size: 14px; line-height: 1.7; }
+
+.site-footer {
+  padding: 74px 0 30px; background: rgba(5,11,19,.78);
+  border-top: 1px solid rgba(255,255,255,.1); color: rgba(245,241,230,.5);
+}
+.footer-main { display: flex; justify-content: space-between; align-items: flex-start; gap: 60px; padding-bottom: 70px; }
+.footer-brand > a { color: var(--cream); font-family: var(--serif); font-size: 28px; line-height: 1; text-decoration: none; }
+.footer-brand p { margin-top: 13px; color: rgba(245,241,230,.45); font-size: 13px; }
+.footer-nav { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 12px 30px; max-width: 560px; }
+.footer-nav a, .footer-bottom a { color: rgba(245,241,230,.62); font-size: 13px; text-decoration: none; }
+.footer-nav a:hover, .footer-bottom a:hover { color: var(--cream); }
+.footer-bottom {
+  display: flex; justify-content: space-between; align-items: center;
+  padding-top: 24px; border-top: 1px solid rgba(255,255,255,.1); font-size: 12px;
+}
+
+@media (max-width: 820px) {
+  .resource-head { grid-template-columns: 1fr; gap: 24px; margin-bottom: 54px; }
+  .resource-groups { grid-template-columns: 1fr; }
+  .resource-group, .resource-group:first-child, .resource-group:last-child { padding: 30px 0; border-left: 0; border-top: 1px solid rgba(255,255,255,.11); }
+  .resource-group:first-child { border-top: 0; }
+  .faq-layout { grid-template-columns: 1fr; gap: 50px; }
+  .faq-intro { position: static; }
+}
+@media (max-width: 620px) {
+  .resources { padding: 92px 0 78px; }
+  .faq { padding: 84px 0 94px; }
+  .faq-item { grid-template-columns: 1fr; gap: 12px; padding: 26px 0 28px; }
+  .footer-main { flex-direction: column; gap: 46px; padding-bottom: 52px; }
+  .footer-nav { justify-content: flex-start; }
+  .footer-bottom { align-items: flex-start; gap: 24px; }
+}
 
 /* ============================================================
    Reduced motion — non-negotiable

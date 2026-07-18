@@ -1,6 +1,6 @@
-# Air Notes — marketing site
+# Air Note — marketing site and journal
 
-One-page marketing site for Air Notes. Static — no build step, no dependencies.
+Marketing site and editorial journal for Air Note. Static — no build step, no dependencies.
 
 ## Run it
 
@@ -20,6 +20,7 @@ python3 -m http.server 4321
 | `index.html` | All content and structure. Copy lives here. |
 | `styles.css` | Design tokens at the top (`:root`), then components. Night/dusk glass + day paper styles. |
 | `app.js` | The motion engine. One rAF loop drives the scroll linked sky colour, the context convergence canvas, and pointer parallax. IntersectionObservers drive reveals, the sticky phone screen swaps, and counters. |
+| `blog/` | Journal index, long-form articles and the shared editorial stylesheet. |
 
 ## The concept — "night sky to paper"
 

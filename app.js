@@ -1,5 +1,5 @@
 /* ============================================================
-   Air Notes — motion engine
+   Air Note — motion engine
    One rAF loop drives: sky interpolation (OKLab), context flow,
    parallax. IntersectionObserver drives reveals, phone states,
    counters. One easing family. Everything slow.
@@ -190,7 +190,7 @@
     ctx.font = '500 9px Inter, sans-serif';
     ctx.textAlign = 'center';
     ctx.fillStyle = 'rgba(245,241,230,.54)';
-    ctx.fillText('AIR NOTES', focus.x, focus.y + 25);
+    ctx.fillText('AIR NOTE', focus.x, focus.y + 25);
 
     if (W >= 760) {
       ctx.font = '500 8px Inter, sans-serif';
