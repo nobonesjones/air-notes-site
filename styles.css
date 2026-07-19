@@ -170,23 +170,34 @@ h2 { font-size: clamp(2rem, 4vw, 3.25rem); line-height: 1.12; margin-bottom: 22p
    ============================================================ */
 .hero {
   min-height: 100svh;
-  display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
-  /* Vertical rhythm is viewport-relative so the whole hero scales with screen
-     height — the phone peeks a consistent amount on a short laptop and a tall
-     display alike, instead of drifting with fixed pixels. */
-  text-align: center; padding: clamp(90px, 12vh, 150px) 0 clamp(56px, 8vh, 120px);
+  display: flex; flex-direction: column;
+  text-align: center;
+}
+.hero > .wrap { flex: 1 0 auto; display: flex; flex-direction: column; align-items: center; width: 100%; }
+
+/* The copy (headline, subhead, button) fills the top ~78vh and is centred
+   within it; the phone starts right after, so its top ALWAYS peeks above the
+   fold — the remaining ~22vh — on any screen height. The subhead → convergence
+   → button spacing stays equal because the stream's focus point is drawn at the
+   exact midpoint of that gap (see app.js). */
+.hero-copy {
+  flex: 0 0 78vh;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding-top: clamp(64px, 8vh, 104px);
+  width: 100%;
 }
 .hero .sub {
-  max-width: 34em; margin: clamp(16px, 2.2vh, 28px) auto 0;
+  max-width: 34em; margin: clamp(18px, 2.6vh, 30px) auto 0;
   font-size: clamp(1.02rem, 1.6vw, 1.2rem);
   color: rgba(245,241,230,.75);
 }
 .hero .cta-row {
   display: flex; align-items: center; justify-content: center;
-  margin-top: clamp(64px, 11vh, 128px);
+  margin-top: clamp(60px, 9vh, 116px);
 }
 @media (max-width: 720px) {
-  .hero { padding: 118px 0 60px; }
+  /* On phones let the hero flow naturally from the top rather than pinning. */
+  .hero-copy { flex: none; display: block; padding-top: 118px; }
   .hero .sub { margin-top: 18px; }
   .hero .cta-row { margin-top: 44px; }
 }
@@ -210,7 +221,7 @@ h2 { font-size: clamp(2rem, 4vw, 3.25rem); line-height: 1.12; margin-bottom: 22p
 /* ============================================================
    THE PHONE — pure CSS
    ============================================================ */
-.phone-wrap { margin: clamp(56px, 9vh, 112px) auto 0; position: relative; width: max-content; max-width: 100%; }
+.phone-wrap { margin: 0 auto; position: relative; width: max-content; max-width: 100%; }
 @media (max-width: 720px) { .phone-wrap { margin-top: 44px; } }
 .phone-wrap.levitate { animation: levitate 6s ease-in-out infinite; }
 @keyframes levitate {
