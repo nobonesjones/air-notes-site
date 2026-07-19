@@ -59,22 +59,30 @@
     canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     const lineCount = W < 640 ? 28 : 52;
-    // Converge in the gap between the subtitle and the CTA button — the point
-    // sits above the button, below the subhead, and stays there at any viewport
-    // height (a fixed 52vh anchor only lined up at one specific window size).
+    // Converge at the exact visual midpoint between the subtitle and the CTA
+    // button. Measured via offsetTop (not getBoundingClientRect) because the
+    // .reveal entrance animation translates these elements 26px at load time —
+    // rect-based measurement froze that stale position into the canvas and the
+    // line ended up visibly closer to the button. offsetTop ignores transforms,
+    // so it always reports the settled layout position.
+    const docTop = el => { let y = 0; for (; el; el = el.offsetParent) y += el.offsetTop; return y; };
     let focusY = H * (W < 640 ? .56 : .52);
     if (W >= 640) {
       const subEl = document.querySelector('.hero .sub');
       const ctaEl = document.querySelector('.hero .cta-row');
       if (subEl && ctaEl) {
-        const subBottom = subEl.getBoundingClientRect().bottom + window.scrollY;
-        const ctaTop = ctaEl.getBoundingClientRect().top + window.scrollY;
-        focusY = (subBottom + ctaTop) / 2;
-      } else if (ctaEl) {
-        focusY = ctaEl.getBoundingClientRect().top + window.scrollY - 40;
+        // The subtitle's box bottom includes half a line-height of empty
+        // leading; the button pill is a hard edge. Trim the leading so the two
+        // gaps are equal to the eye, not just to the boxes.
+        const cs = getComputedStyle(subEl);
+        const halfLeading = Math.max(0, (parseFloat(cs.lineHeight) - parseFloat(cs.fontSize)) / 2) || 0;
+        const subVisualBottom = docTop(subEl) + subEl.offsetHeight - halfLeading;
+        const ctaTop = docTop(ctaEl);
+        focusY = (subVisualBottom + ctaTop) / 2;
       }
     }
     focus = { x: W * .5, y: focusY };
+    canvas.dataset.focusY = String(Math.round(focusY));
     paths = Array.from({ length: lineCount }, (_, i) => {
       const n = i / (lineCount - 1);
       const startTop = W < 640 ? .14 : .1;
@@ -111,6 +119,11 @@
   }
   seedFlow();
   addEventListener('resize', seedFlow);
+  // Source Serif 4 arrives after first paint and reflows the headline, moving
+  // the subtitle and button — re-measure once the real fonts are in, and again
+  // on full load as a belt-and-braces pass.
+  addEventListener('load', seedFlow);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(seedFlow);
 
   /* ---------- pointer parallax (throttled + eased) ---------- */
   let tx = 0, ty = 0, px = 0, py = 0;
