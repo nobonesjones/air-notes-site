@@ -23,6 +23,8 @@ window.ADMIN_CONFIG = {
   tables: {
     profiles: "profiles",
     analytics: "analytics_events",
+    earlyAccessEvents: "early_access_events",
+    earlyAccessSignups: "early_access_signups",
     // Tried in order; first one that exists is used for capture counts/lists.
     captureCandidates: ["captures", "meetings", "notes", "recordings", "transcripts"],
   },

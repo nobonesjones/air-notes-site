@@ -273,6 +273,7 @@
     main.innerHTML = "";
 
     if (hash.startsWith("#/user/")) return renderUserDetail(main, decodeURIComponent(hash.slice("#/user/".length)));
+    if (hash === "#/funnel") return renderFunnel(main);
     if (hash === "#/users") return renderUsers(main);
     if (hash === "#/analytics") return renderAnalytics(main);
     return renderHome(main);
@@ -374,6 +375,185 @@
     const key = await profilesCreatedKey();
     if (!key) return null;
     return countRows(cfg.tables.profiles, (q) => q.gte(key, daysAgoISO(days)));
+  }
+
+  // ---- page: Funnel --------------------------------------------------------
+  async function renderFunnel(main) {
+    const head = el("div", "funnel-page-head");
+    head.appendChild(pageTitle("Funnel", "See where interest becomes an email — then where new users become active."));
+
+    const rangeSeg = el("div", "seg funnel-range");
+    let range = "7";
+    const rangeButtons = [["7", "This week"], ["30", "30 days"], ["3650", "All time"]].map(([value, label]) => {
+      const button = el("button", "seg-btn" + (value === range ? " active" : ""), label);
+      button.type = "button";
+      button.addEventListener("click", () => {
+        if (range === value) return;
+        range = value;
+        rangeButtons.forEach((item) => item.classList.toggle("active", item === button));
+        load();
+      });
+      rangeSeg.appendChild(button);
+      return button;
+    });
+    head.appendChild(rangeSeg);
+    main.appendChild(head);
+
+    const tabs = el("div", "funnel-tabs");
+    tabs.setAttribute("role", "tablist");
+    let funnel = "early";
+    const tabButtons = [["early", "Early access"], ["onboarding", "App onboarding"]].map(([value, label]) => {
+      const button = el("button", "funnel-tab" + (value === funnel ? " active" : ""), label);
+      button.type = "button";
+      button.setAttribute("role", "tab");
+      button.setAttribute("aria-selected", String(value === funnel));
+      button.addEventListener("click", () => {
+        if (funnel === value) return;
+        funnel = value;
+        tabButtons.forEach((item) => {
+          item.classList.toggle("active", item === button);
+          item.setAttribute("aria-selected", String(item === button));
+        });
+        load();
+      });
+      tabs.appendChild(button);
+      return button;
+    });
+    main.appendChild(tabs);
+
+    const panel = el("section", "funnel-panel");
+    const panelHead = el("div", "funnel-panel-head");
+    const titleWrap = el("div");
+    const panelTitle = el("h2", "funnel-panel-title", "Email acquisition");
+    const panelSub = el("p", "funnel-panel-sub", "Every step from CTA click to email captured.");
+    titleWrap.append(panelTitle, panelSub);
+    const entrants = el("span", "funnel-entrants", "Loading…");
+    panelHead.append(titleWrap, entrants);
+    panel.appendChild(panelHead);
+    const flow = el("div", "funnel-flow");
+    panel.appendChild(flow);
+    main.appendChild(panel);
+
+    const metrics = el("div", "funnel-metrics");
+    main.appendChild(metrics);
+    const insight = el("div", "funnel-insight");
+    main.appendChild(insight);
+
+    const earlyStages = [
+      { key: "signup_opened", label: "Clicked CTA", hint: "Opened the form" },
+      { key: "gender", label: "Gender", hint: "First answer" },
+      { key: "age_range", label: "Age", hint: "Second answer" },
+      { key: "work_role", label: "Work", hint: "Role selected" },
+      { key: "primary_use_case", label: "Use case", hint: "Intent selected" },
+      { key: "email", label: "Reached email", hint: "Final step viewed" },
+      { key: "signup_completed", label: "Left email", hint: "Email captured" },
+    ];
+    const onboardingStages = [
+      { keys: ["app_opened", "opened_app", "first_launch"], label: "Opened app", hint: "First launch" },
+      { keys: ["onboarding_get_started", "get_started_tapped", "tapped_get_started"], label: "Get started", hint: "Welcome complete" },
+      { keys: ["account_created", "signed_up", "user_signed_up"], label: "Created account", hint: "Email or Apple" },
+      { keys: ["microphone_allowed", "allowed_microphone"], label: "Microphone", hint: "Permission granted" },
+      { keys: ["onboarding_finished", "tour_finished"], label: "Finished tour", hint: "Intro complete" },
+      { keys: ["home_viewed", "landed_on_home"], label: "Landed home", hint: "Onboarding done" },
+      { keys: ["first_capture", "capture_created"], label: "First capture", hint: "Activation moment" },
+    ];
+
+    const unique = (rows, predicate, identity) => new Set(rows.filter(predicate).map(identity).filter(Boolean)).size;
+
+    function drawStages(stages) {
+      flow.innerHTML = "";
+      const entered = stages[0]?.count || 0;
+      stages.forEach((stage, index) => {
+        const conversion = entered ? Math.round((stage.count / entered) * 100) : 0;
+        const previous = index ? stages[index - 1].count : stage.count;
+        const stepRate = previous ? Math.round((stage.count / previous) * 100) : 0;
+        const item = el("article", "funnel-stage" + (index === stages.length - 1 ? " is-goal" : ""));
+        item.style.setProperty("--stage-scale", entered ? Math.max(.58, stage.count / entered) : .58);
+        item.appendChild(el("span", "funnel-step", String(index + 1).padStart(2, "0")));
+        item.appendChild(el("div", "funnel-stage-label", stage.label));
+        item.appendChild(el("div", "funnel-stage-hint", stage.hint));
+        item.appendChild(el("strong", "funnel-stage-count", stage.count.toLocaleString()));
+        item.appendChild(el("div", "funnel-stage-rate", `${conversion}% of clicks`));
+        if (index) item.appendChild(el("div", "funnel-step-rate", `${stepRate}% →`));
+        flow.appendChild(item);
+      });
+    }
+
+    function metric(label, value, note, accent) {
+      const card = el("article", "funnel-metric" + (accent ? " accent" : ""));
+      card.appendChild(el("span", "funnel-metric-label", label));
+      card.appendChild(el("strong", "funnel-metric-value", value));
+      card.appendChild(el("span", "funnel-metric-note", note));
+      metrics.appendChild(card);
+    }
+
+    async function loadEarlyAccess() {
+      const since = daysAgoISO(parseInt(range, 10));
+      const [{ data: events, error: eventError }, { data: signups, error: signupError }] = await Promise.all([
+        sb.from(cfg.tables.earlyAccessEvents).select("session_id,event_name,step_name,created_at").gte("created_at", since).limit(50000),
+        sb.from(cfg.tables.earlyAccessSignups).select("session_id,email,submitted_at").gte("submitted_at", since).limit(50000),
+      ]);
+      if (eventError || signupError) throw eventError || signupError;
+      const eventRows = events || [];
+      const signupRows = signups || [];
+      const stages = earlyStages.map((stage) => ({ ...stage, count:
+        stage.key === "signup_opened"
+          ? unique(eventRows, (row) => row.event_name === "signup_opened", (row) => row.session_id)
+          : stage.key === "signup_completed"
+            ? new Set(signupRows.map((row) => row.session_id || row.email).filter(Boolean)).size
+            : unique(eventRows, (row) => row.event_name === "signup_step_viewed" && row.step_name === stage.key, (row) => row.session_id)
+      }));
+      return stages;
+    }
+
+    async function loadOnboarding() {
+      const since = daysAgoISO(parseInt(range, 10));
+      const { data, error } = await sb.from(cfg.tables.analytics)
+        .select("user_id,event_name,created_at").gte("created_at", since).limit(50000);
+      if (error) throw error;
+      const rows = data || [];
+      return onboardingStages.map((stage) => ({ ...stage, count:
+        unique(rows, (row) => stage.keys.includes(row.event_name), (row) => row.user_id)
+      }));
+    }
+
+    async function load() {
+      flow.innerHTML = "<div class='funnel-loading'><span class='spinner'></span><span>Loading funnel…</span></div>";
+      metrics.innerHTML = "";
+      insight.innerHTML = "";
+      panelTitle.textContent = funnel === "early" ? "Email acquisition" : "App onboarding";
+      panelSub.textContent = funnel === "early" ? "Every step from CTA click to email captured." : "Every step from first launch to first capture.";
+      try {
+        const stages = funnel === "early" ? await loadEarlyAccess() : await loadOnboarding();
+        drawStages(stages);
+        const entered = stages[0]?.count || 0;
+        const reachedGoal = stages[stages.length - 1]?.count || 0;
+        const reachedEmail = funnel === "early" ? stages.find((stage) => stage.key === "email")?.count || 0 : reachedGoal;
+        const overall = entered ? Math.round((reachedGoal / entered) * 100) : 0;
+        entrants.textContent = `${entered.toLocaleString()} user${entered === 1 ? "" : "s"} entered`;
+        metric(funnel === "early" ? "CTA clicks" : "Opened app", entered.toLocaleString(), range === "7" ? "This week" : range === "30" ? "Last 30 days" : "All time");
+        if (funnel === "early") metric("Reached email", reachedEmail.toLocaleString(), entered ? `${Math.round(reachedEmail / entered * 100)}% of clicks` : "No clicks yet");
+        metric(funnel === "early" ? "Emails captured" : "First captures", reachedGoal.toLocaleString(), entered ? `${overall}% overall conversion` : "No entrants yet", true);
+        metric("Drop-off", entered ? `${100 - overall}%` : "—", entered ? `${Math.max(0, entered - reachedGoal)} user${entered - reachedGoal === 1 ? "" : "s"} lost` : "Waiting for data");
+
+        let biggestDrop = null;
+        for (let i = 1; i < stages.length; i++) {
+          const lost = stages[i - 1].count - stages[i].count;
+          if (!biggestDrop || lost > biggestDrop.lost) biggestDrop = { from: stages[i - 1], to: stages[i], lost };
+        }
+        const message = biggestDrop && biggestDrop.lost > 0
+          ? `Biggest drop-off: ${biggestDrop.from.label} → ${biggestDrop.to.label}. ${biggestDrop.lost} user${biggestDrop.lost === 1 ? "" : "s"} left here.`
+          : entered ? "No drop-off yet — every entrant reached the goal." : "No funnel activity in this time range yet.";
+        insight.appendChild(el("span", "insight-dot"));
+        insight.appendChild(el("p", null, message));
+      } catch (error) {
+        flow.innerHTML = "";
+        flow.appendChild(el("p", "muted", "Couldn't load this funnel. Check the admin read policy for its event tables."));
+        entrants.textContent = "Unavailable";
+      }
+    }
+
+    load();
   }
 
   // ---- page: Users ---------------------------------------------------------
