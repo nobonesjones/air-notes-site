@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Air Note — Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+<!-- loading -->
+<div id="view-loading" class="center-screen">
+  <div class="spinner" aria-label="Loading"></div>
+</div>
+
+<!-- login -->
+<div id="view-login" class="center-screen hidden">
+  <div class="login-card">
+    <div class="brand-mark">Air Note</div>
+    <h1 class="login-title">Admin</h1>
+    <form id="login-form">
+      <label class="field">
+        <span>Email</span>
+        <input id="f-email" type="email" autocomplete="email" required>
+      </label>
+      <label class="field">
+        <span>Password</span>
+        <input id="f-pass" type="password" autocomplete="current-password" required>
+      </label>
+      <button id="login-submit" type="submit" class="btn-primary">Log in</button>
+    </form>
+    <button id="toggle-mode" class="link-btn">Need an account? Sign up</button>
+    <div id="auth-msg" class="auth-msg hidden"></div>
+    <button id="back-home" class="link-btn subtle">← Back to site</button>
+  </div>
+</div>
+
+<!-- app -->
+<div id="view-app" class="hidden">
+  <aside class="sidebar">
+    <div class="side-brand">Air Note</div>
+    <nav class="side-nav">
+      <div class="nav-group">
+        <a class="nav-item" href="#/home"><span class="nav-ico">◇</span> Home</a>
+        <a class="nav-item" href="#/users"><span class="nav-ico">○</span> Users</a>
+        <a class="nav-item" href="#/analytics"><span class="nav-ico">△</span> User analytics</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-heading">Coming soon</div>
+        <span class="nav-item disabled">Revenue <em class="soon">soon</em></span>
+        <span class="nav-item disabled">WhatsApp agent <em class="soon">soon</em></span>
+        <span class="nav-item disabled">Claude / MCP <em class="soon">soon</em></span>
+        <span class="nav-item disabled">Notifications <em class="soon">soon</em></span>
+        <span class="nav-item disabled">Settings <em class="soon">soon</em></span>
+      </div>
+    </nav>
+    <div class="side-foot">
+      <div id="who" class="who">admin</div>
+      <button id="sign-out" class="link-btn subtle">Sign out</button>
+    </div>
+  </aside>
+  <main id="main" class="content"></main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>
