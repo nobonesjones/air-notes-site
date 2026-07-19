@@ -46,6 +46,31 @@
     }
     return null;
   };
+  // Animate a numeric stat up from zero; falls back to a plain set when the
+  // user prefers reduced motion.
+  const reducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function animateCount(node, n) {
+    if (reducedMotion() || !n) {
+      node.textContent = (n || 0).toLocaleString();
+      return;
+    }
+    const dur = 700;
+    const t0 = performance.now();
+    const tick = (t) => {
+      const p = Math.min(1, (t - t0) / dur);
+      const eased = 1 - Math.pow(1 - p, 3);
+      node.textContent = Math.round(n * eased).toLocaleString();
+      if (p < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  }
+  // Resolve a loading (skeleton) stat: null → em dash, number → count up.
+  function setStat(node, n) {
+    node.classList.remove("skeleton");
+    if (n == null) node.textContent = "—";
+    else animateCount(node, n);
+  }
+
   const CREATED_KEYS = ["created_at", "inserted_at", "createdAt", "created"];
   const EMAIL_KEYS = ["email", "email_address", "user_email"];
   const NAME_KEYS = ["display_name", "full_name", "name", "username", "first_name"];
@@ -132,6 +157,7 @@
 
     currentUser = user;
     $("#who").textContent = user.email || "admin";
+    $("#who-avatar").textContent = (user.email || "A").charAt(0).toUpperCase();
     show("app");
     if (!location.hash) location.hash = "#/home";
     route();
@@ -261,7 +287,7 @@
     const card = (label) => {
       const c = el("div", "kpi-card");
       c.appendChild(el("div", "kpi-label", label));
-      const v = el("div", "kpi-value", "…");
+      const v = el("div", "kpi-value skeleton", "");
       c.appendChild(v);
       grid.appendChild(c);
       return v;
@@ -273,18 +299,17 @@
     const v30 = card("New signups · 30 days");
 
     // Total users
-    countRows(cfg.tables.profiles).then((n) => (vUsers.textContent = n == null ? "—" : n.toLocaleString()));
+    countRows(cfg.tables.profiles).then((n) => setStat(vUsers, n));
 
     // Total captures
     resolveCaptureTable().then(async (t) => {
-      if (!t) { vCaptures.textContent = "—"; return; }
-      const n = await countRows(t);
-      vCaptures.textContent = n == null ? "—" : n.toLocaleString();
+      if (!t) { setStat(vCaptures, null); return; }
+      setStat(vCaptures, await countRows(t));
     });
 
     // New signups — needs a created_at on profiles; probe once.
-    signupsSince(7).then((n) => (v7.textContent = n == null ? "—" : n.toLocaleString()));
-    signupsSince(30).then((n) => (v30.textContent = n == null ? "—" : n.toLocaleString()));
+    signupsSince(7).then((n) => setStat(v7, n));
+    signupsSince(30).then((n) => setStat(v30, n));
 
     // Active users today — only if analytics_events exists & has data.
     if (await hasAnalytics()) {
@@ -296,9 +321,9 @@
           .gte("created_at", startOfTodayISO());
         if (error) throw error;
         const uniq = new Set((data || []).map((r) => r.user_id).filter(Boolean));
-        v.textContent = uniq.size.toLocaleString();
+        setStat(v, uniq.size);
       } catch (e) {
-        v.textContent = "—";
+        setStat(v, null);
       }
     }
 
@@ -614,12 +639,14 @@
       const kpi = (label, val) => {
         const c = el("div", "kpi-card");
         c.appendChild(el("div", "kpi-label", label));
-        c.appendChild(el("div", "kpi-value", val));
+        const v = el("div", "kpi-value", "");
+        animateCount(v, val);
+        c.appendChild(v);
         kpis.appendChild(c);
       };
-      kpi("Total events", totalEvents.toLocaleString());
-      kpi("DAU (today)", dau.toLocaleString());
-      kpi("WAU (7 days)", wau.toLocaleString());
+      kpi("Total events", totalEvents);
+      kpi("DAU (today)", dau);
+      kpi("WAU (7 days)", wau);
 
       // Top events by count.
       const counts = {};
@@ -633,7 +660,11 @@
         row.appendChild(el("div", "bar-label", name));
         const track = el("div", "bar-track");
         const fill = el("div", "bar-fill");
-        fill.style.width = Math.max(4, (n / max) * 100) + "%";
+        // Start at 0 and set the real width a frame later so the CSS
+        // transition sweeps the bar in.
+        const target = Math.max(4, (n / max) * 100) + "%";
+        fill.style.width = "0%";
+        requestAnimationFrame(() => requestAnimationFrame(() => { fill.style.width = target; }));
         track.appendChild(fill);
         row.appendChild(track);
         row.appendChild(el("div", "bar-value", String(n)));
