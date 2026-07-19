@@ -338,6 +338,7 @@
   const signupConsent = $('#signupConsent');
   const signupSubmit = $('#signupSubmit');
   const signupError = $('#signupError');
+  const signupCelebration = $('#signupCelebration');
   const answers = {};
   let signupStep = 0;
   let previousFocus = null;
@@ -374,6 +375,35 @@
     } catch (_) { /* Analytics must never interrupt the signup. */ }
   }
 
+  function launchBurst(origin) {
+    if (reduced || !origin) return;
+    const rect = origin.getBoundingClientRect();
+    const burst = document.createElement('span');
+    burst.className = 'signup-launch-burst';
+    burst.style.left = `${rect.left + rect.width / 2}px`;
+    burst.style.top = `${rect.top + rect.height / 2}px`;
+    burst.innerHTML = '<i class="launch-ring"></i>' + Array.from({ length: 10 }, (_, i) =>
+      `<i class="launch-spark" style="--angle:${i * 36}deg;--distance:${46 + (i % 3) * 12}px;--delay:${i * 12}ms"></i>`
+    ).join('');
+    document.body.appendChild(burst);
+    setTimeout(() => burst.remove(), 950);
+  }
+
+  function celebrate(kind) {
+    if (reduced) return;
+    signupCelebration.replaceChildren();
+    signupCelebration.className = `signup-celebration is-${kind}`;
+    const count = kind === 'complete' ? 22 : 12;
+    for (let i = 0; i < count; i++) {
+      const spark = document.createElement('i');
+      const angle = -155 + (310 / Math.max(1, count - 1)) * i;
+      const distance = kind === 'complete' ? 112 + (i % 4) * 18 : 72 + (i % 3) * 12;
+      spark.style.cssText = `--angle:${angle}deg;--distance:${distance}px;--delay:${(i % 6) * 28}ms;--size:${3 + (i % 3) * 2}px`;
+      signupCelebration.appendChild(spark);
+    }
+    setTimeout(() => signupCelebration.replaceChildren(), kind === 'complete' ? 1700 : 1100);
+  }
+
   function showSignupStep(index) {
     signupStep = Math.max(0, Math.min(index, signupSteps.length - 1));
     signupSteps.forEach((step, i) => step.classList.toggle('is-active', i === signupStep));
@@ -381,6 +411,14 @@
     signupStepLabel.textContent = `A few quick questions · ${signupStep + 1} of ${signupSteps.length}`;
     signupBack.disabled = signupStep === 0;
     const active = signupSteps[signupStep];
+    const reachedFinalStep = active.dataset.step === 'email';
+    signup.classList.toggle('is-final-step', reachedFinalStep);
+    if (reachedFinalStep) {
+      signupDialog.classList.remove('final-step-arrival');
+      void signupDialog.offsetWidth;
+      signupDialog.classList.add('final-step-arrival');
+      celebrate('final');
+    }
     const selected = $('.choice.is-selected', active);
     (selected || $('.choice, input', active))?.focus({ preventScroll: true });
     trackSignup('signup_step_viewed', active.dataset.step);
@@ -388,12 +426,18 @@
 
   function openSignup(event) {
     event?.preventDefault();
+    const trigger = event?.currentTarget;
+    launchBurst(trigger);
+    trigger?.classList.add('cta-launching');
+    setTimeout(() => trigger?.classList.remove('cta-launching'), 720);
     previousFocus = document.activeElement;
+    signup.classList.add('is-arriving');
     signup.classList.add('is-open');
     signup.setAttribute('aria-hidden', 'false');
     document.body.classList.add('signup-open');
     showSignupStep(signupStep);
     requestAnimationFrame(() => signupDialog.focus({ preventScroll: true }));
+    setTimeout(() => signup.classList.remove('is-arriving'), 800);
     trackSignup('signup_opened');
   }
 
@@ -401,6 +445,7 @@
     signup.classList.remove('is-open');
     signup.setAttribute('aria-hidden', 'true');
     document.body.classList.remove('signup-open');
+    signup.classList.remove('is-arriving', 'is-final-step', 'is-complete');
     previousFocus?.focus?.();
   }
 
@@ -459,6 +504,9 @@
     signupStepLabel.textContent = 'Early access confirmed';
     signupProgress.style.width = '100%';
     signupFooter.hidden = true;
+    signup.classList.remove('is-final-step');
+    signup.classList.add('is-complete');
+    celebrate('complete');
   });
 
   document.addEventListener('keydown', event => {

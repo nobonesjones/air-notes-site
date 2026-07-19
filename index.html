@@ -14,7 +14,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;1,9..144,400&family=Inter:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=3">
+<link rel="stylesheet" href="styles.css?v=4">
 </head>
 <body>
 
@@ -322,6 +322,7 @@
 <div class="signup-modal" id="signup" aria-hidden="true">
   <div class="signup-backdrop" data-signup-close></div>
   <section class="signup-dialog" role="dialog" aria-modal="true" aria-labelledby="signupTitle" tabindex="-1">
+    <div class="signup-celebration" id="signupCelebration" aria-hidden="true"></div>
     <button class="signup-close" type="button" data-signup-close aria-label="Close signup">×</button>
     <div class="signup-progress" aria-hidden="true"><span id="signupProgress"></span></div>
     <p class="signup-kicker" id="signupStepLabel">A few quick questions · 1 of 5</p>
@@ -448,6 +449,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
-<script src="app.js?v=3"></script>
+<script src="app.js?v=4"></script>
 </body>
 </html>
