@@ -67,7 +67,7 @@
     // so it always reports the settled layout position.
     const docTop = el => { let y = 0; for (; el; el = el.offsetParent) y += el.offsetTop; return y; };
     let focusY = H * (W < 640 ? .56 : .52);
-    if (W >= 640) {
+    {
       const subEl = document.querySelector('.hero .sub');
       const ctaEl = document.querySelector('.hero .cta-row');
       if (subEl && ctaEl) {
@@ -276,7 +276,13 @@
   const ro = new IntersectionObserver(es => es.forEach(e => {
     if (e.isIntersecting) { e.target.classList.add('in'); ro.unobserve(e.target); }
   }), { threshold: .25 });
-  $$('.reveal').forEach(el => ro.observe(el));
+  // Hero elements are the landing screen — reveal them on load unconditionally.
+  // The .25 visibility threshold kept the phone mockup invisible on short
+  // screens where only its top ~20% peeks above the fold.
+  $$('.reveal').forEach(el => {
+    if (el.closest('.hero')) requestAnimationFrame(() => el.classList.add('in'));
+    else ro.observe(el);
+  });
 
   /* ---------- sticky phone state swap ---------- */
   const screens = $$('#stickyScreen .pscreen');
