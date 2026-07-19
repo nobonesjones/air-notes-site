@@ -223,22 +223,22 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .auth-msg.warn { background: #FBEDE6; color: #94491F; }
 .auth-msg.ok   { background: #E6F2EA; color: #2F6440; }
 
-/* ---------- app shell ---------- */
-#view-app { display: flex; min-height: 100vh; }
+/* ---------- app shell ----------
+   Polar-style floating sheet: the sidebar sits directly on the page
+   background, and the content area is one raised white rounded panel
+   inset from the top/right/bottom edges. */
+#view-app { display: flex; min-height: 100vh; padding: 12px 12px 12px 0; }
 
 .sidebar {
   width: 240px;
   flex-shrink: 0;
-  background: rgba(255,255,255,.72);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  border-right: 1px solid var(--hairline);
-  padding: 26px 16px 20px;
+  background: transparent;
+  padding: 20px 16px 12px;
   display: flex;
   flex-direction: column;
   position: sticky;
   top: 0;
-  height: 100vh;
+  height: calc(100vh - 12px);
 }
 .side-brand {
   display: flex;
@@ -338,8 +338,20 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 }
 .side-foot .link-btn.subtle { margin-top: 10px; padding: 0 8px; text-align: left; }
 
-/* ---------- content ---------- */
-.content { flex: 1; padding: 44px 48px; max-width: 1080px; min-width: 0; }
+/* ---------- content: the floating sheet ---------- */
+.content {
+  flex: 1;
+  min-width: 0;
+  background: var(--card);
+  border: 1px solid var(--hairline);
+  border-radius: 22px;
+  box-shadow: 0 1px 2px rgba(15,36,56,.04), 0 16px 44px rgba(15,36,56,.07);
+  padding: 44px 48px;
+  min-height: calc(100vh - 24px);
+  animation: card-in .55s var(--ease) both;
+}
+/* keep line lengths sane on wide screens without shrinking the sheet */
+.content > * { max-width: 1080px; }
 .page-head { margin-bottom: 28px; animation: rise .55s var(--ease) both; }
 .page-title { font-family: var(--serif); font-weight: 600; font-size: 30px; color: var(--ink); letter-spacing: -.01em; }
 .page-sub { color: var(--muted); font-size: 14px; margin-top: 4px; }
@@ -490,8 +502,9 @@ select.search { min-width: 160px; cursor: pointer; }
 
 /* ---------- responsive ---------- */
 @media (max-width: 720px) {
-  #view-app { flex-direction: column; }
-  .sidebar { width: 100%; height: auto; position: static; flex-direction: row; flex-wrap: wrap; align-items: center; }
+  #view-app { flex-direction: column; padding: 0 8px 12px; }
+  .sidebar { width: 100%; height: auto; position: static; flex-direction: row; flex-wrap: wrap; align-items: center; padding: 16px 8px 12px; }
+  .content { border-radius: 18px; min-height: 0; }
   .side-brand { padding: 0 8px 0 0; }
   .side-nav { display: flex; gap: 12px; flex: 1 1 100%; }
   .nav-group { display: flex; gap: 4px; margin-bottom: 0; }
