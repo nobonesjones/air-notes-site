@@ -60,14 +60,20 @@
     canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     const lineCount = W < 640 ? 28 : 52;
-    // Converge on the actual CTA button so the stream and the button stay
-    // locked together at any viewport height (a fixed 52vh anchor only lined
-    // up at one specific window size). Fall back to 52vh if the button isn't found.
+    // Converge in the gap between the subtitle and the CTA button — the point
+    // sits above the button, below the subhead, and stays there at any viewport
+    // height (a fixed 52vh anchor only lined up at one specific window size).
     let focusY = H * (W < 640 ? .56 : .52);
-    const ctaEl = document.querySelector('.hero .cta-row');
-    if (ctaEl && W >= 640) {
-      const r = ctaEl.getBoundingClientRect();
-      focusY = r.top + window.scrollY + r.height / 2;
+    if (W >= 640) {
+      const subEl = document.querySelector('.hero .sub');
+      const ctaEl = document.querySelector('.hero .cta-row');
+      if (subEl && ctaEl) {
+        const subBottom = subEl.getBoundingClientRect().bottom + window.scrollY;
+        const ctaTop = ctaEl.getBoundingClientRect().top + window.scrollY;
+        focusY = (subBottom + ctaTop) / 2;
+      } else if (ctaEl) {
+        focusY = ctaEl.getBoundingClientRect().top + window.scrollY - 40;
+      }
     }
     focus = { x: W * .5, y: focusY };
     paths = Array.from({ length: lineCount }, (_, i) => {
