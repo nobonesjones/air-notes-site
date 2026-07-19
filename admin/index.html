@@ -42,12 +42,12 @@
 <!-- app -->
 <div id="view-app" class="hidden">
   <aside class="sidebar">
-    <div class="side-brand">Air Note</div>
+    <div class="side-brand">Air Note <span class="side-badge">Admin</span></div>
     <nav class="side-nav">
       <div class="nav-group">
-        <a class="nav-item" href="#/home"><span class="nav-ico">◇</span> Home</a>
-        <a class="nav-item" href="#/users"><span class="nav-ico">○</span> Users</a>
-        <a class="nav-item" href="#/analytics"><span class="nav-ico">△</span> User analytics</a>
+        <a class="nav-item" href="#/home"><span class="nav-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg></span> Home</a>
+        <a class="nav-item" href="#/users"><span class="nav-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.2 3.4-5 6.5-5s5.7 1.8 6.5 5"/><path d="M16 5.2a3.5 3.5 0 0 1 0 5.6"/><path d="M17.8 15.4c1.9.7 3.2 2.2 3.7 4.6"/></svg></span> Users</a>
+        <a class="nav-item" href="#/analytics"><span class="nav-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10"/><path d="M11 20V4"/><path d="M18 20v-8"/></svg></span> User analytics</a>
       </div>
       <div class="nav-group">
         <div class="nav-heading">Coming soon</div>
@@ -59,7 +59,10 @@
       </div>
     </nav>
     <div class="side-foot">
-      <div id="who" class="who">admin</div>
+      <div class="who-row">
+        <span id="who-avatar" class="avatar">A</span>
+        <div id="who" class="who">admin</div>
+      </div>
       <button id="sign-out" class="link-btn subtle">Sign out</button>
     </div>
   </aside>
