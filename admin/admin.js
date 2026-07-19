@@ -596,14 +596,21 @@
     }
 
     const controls = el("div", "controls");
-    const rangeSel = el("select", "search");
-    [["7", "Last 7 days"], ["30", "Last 30 days"], ["90", "Last 90 days"], ["3650", "All time"]].forEach(([v, label]) => {
-      const o = el("option", null, label);
-      o.value = v;
-      rangeSel.appendChild(o);
+    const seg = el("div", "seg");
+    let range = "30";
+    const segBtns = [["7", "7 days"], ["30", "30 days"], ["90", "90 days"], ["3650", "All time"]].map(([v, label]) => {
+      const b = el("button", "seg-btn" + (v === range ? " active" : ""), label);
+      b.type = "button";
+      b.addEventListener("click", () => {
+        if (range === v) return;
+        range = v;
+        segBtns.forEach((x) => x.classList.toggle("active", x === b));
+        load();
+      });
+      seg.appendChild(b);
+      return b;
     });
-    rangeSel.value = "30";
-    controls.appendChild(rangeSel);
+    controls.appendChild(seg);
     main.appendChild(controls);
 
     const kpis = el("div", "kpi-grid");
@@ -617,7 +624,7 @@
     async function load() {
       kpis.innerHTML = "";
       holder.innerHTML = "<p class='muted'>Loading…</p>";
-      const days = parseInt(rangeSel.value, 10);
+      const days = parseInt(range, 10);
       let rows = [];
       try {
         const { data, error } = await sb
@@ -672,7 +679,6 @@
       });
     }
 
-    rangeSel.addEventListener("change", load);
     load();
   }
 
