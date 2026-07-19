@@ -180,17 +180,21 @@
     }
 
     // The central anchor makes the convergence legible without competing with the hero copy.
-    ctx.globalAlpha = flowAlpha;
-    ctx.shadowBlur = 0;
-    ctx.strokeStyle = 'rgba(245,241,230,.48)';
-    ctx.fillStyle = 'rgba(245,241,230,.72)';
-    ctx.lineWidth = 1;
-    ctx.beginPath(); ctx.arc(focus.x, focus.y, 8, 0, Math.PI * 2); ctx.stroke();
-    ctx.beginPath(); ctx.arc(focus.x, focus.y, 2, 0, Math.PI * 2); ctx.fill();
-    ctx.font = '500 9px Inter, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillStyle = 'rgba(245,241,230,.54)';
-    ctx.fillText('AIR NOTE', focus.x, focus.y + 25);
+    // Hidden below 760px: at phone widths the hero text is vertically centred right
+    // where the anchor sits, so the mark would land on top of the subhead.
+    if (W >= 760) {
+      ctx.globalAlpha = flowAlpha;
+      ctx.shadowBlur = 0;
+      ctx.strokeStyle = 'rgba(245,241,230,.48)';
+      ctx.fillStyle = 'rgba(245,241,230,.72)';
+      ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.arc(focus.x, focus.y, 8, 0, Math.PI * 2); ctx.stroke();
+      ctx.beginPath(); ctx.arc(focus.x, focus.y, 2, 0, Math.PI * 2); ctx.fill();
+      ctx.font = '500 9px Inter, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillStyle = 'rgba(245,241,230,.54)';
+      ctx.fillText('AIR NOTE', focus.x, focus.y + 25);
+    }
 
     if (W >= 760) {
       ctx.font = '500 8px Inter, sans-serif';
