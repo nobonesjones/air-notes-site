@@ -136,7 +136,7 @@
 
   /* ---------- sky engine ---------- */
   const sky = $('#sky'), aurora = $('#aurora'), grain = $('#grain');
-  const heroEl = $('#hero'), act2 = $('#act2'), ctaEl = $('#cta');
+  const heroEl = $('#hero'), act2 = $('#act2'), ctaEl = $('#cta'), resEl = $('#resources');
   let anchors = {};
   function measure() {
     const y = el => el.getBoundingClientRect().top + scrollY;
@@ -144,7 +144,10 @@
       dawnStart: y(act2) - innerHeight * .95,   // sky starts warming as act2 approaches
       dayFull:   y(act2) + innerHeight * .08,   // fully paper
       duskStart: y(ctaEl) - innerHeight * .75,  // paper starts cooling
-      duskFull:  y(ctaEl) + innerHeight * .05
+      duskFull:  y(ctaEl) + innerHeight * .05,
+      // The light sheet (resources onward) — nav flips back to day mode
+      // while the sky stays dark behind the sheet's rounded shoulders.
+      lightReturn: resEl ? y(resEl) - innerHeight * .45 : Infinity
     };
   }
   measure();
@@ -170,7 +173,7 @@
     // dusk: paper -> night
     const t = clamp01((sy - a.duskStart) / Math.max(1, a.duskFull - a.duskStart));
     const c = t < .5 ? mixLab(PAPER, DAWN, t / .5) : mixLab(DAWN, NIGHT, (t - .5) / .5);
-    return { c, flow: 0, aur: t * .35, grain: .02 + t * .01, day: t < .4 };
+    return { c, flow: 0, aur: t * .35, grain: .02 + t * .01, day: t < .4 || sy > a.lightReturn };
   }
 
   function drawFlow(dt) {
