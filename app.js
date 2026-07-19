@@ -37,6 +37,7 @@
   const canvas = $('#contextFlow'), ctx = canvas.getContext('2d');
   let paths = [], packets = [], W = 0, H = 0, dpr = 1;
   let focus = { x: 0, y: 0 };
+  let mobileLabelY = 0;
 
   const fract = n => n - Math.floor(n);
   const seeded = n => fract(Math.sin(n * 91.731) * 43758.5453);
@@ -93,6 +94,18 @@
       length: 3 + seeded(i + 51) * 9,
       alpha: .45 + seeded(i + 78) * .5
     }));
+
+    // On phones the four labels sit in the gap between the hero button and the phone
+    // mockup, so read the real layout rather than guessing a fraction of viewport height.
+    mobileLabelY = H * .58;
+    if (W < 760) {
+      const ctaRow = $('.hero .cta-row'), phoneWrap = $('.hero .phone-wrap');
+      if (ctaRow && phoneWrap) {
+        const ctaBottom = ctaRow.getBoundingClientRect().bottom;
+        const phoneTop = phoneWrap.getBoundingClientRect().top;
+        if (phoneTop > ctaBottom + 16) mobileLabelY = (ctaBottom + phoneTop) / 2;
+      }
+    }
   }
   seedFlow();
   addEventListener('resize', seedFlow);
@@ -196,13 +209,22 @@
       ctx.fillText('AIR NOTE', focus.x, focus.y + 25);
     }
 
+    const sourceLabels = ['MEETINGS', 'VOICE NOTES', 'MESSAGES', 'IDEAS'];
+    ctx.globalAlpha = flowAlpha;
+    ctx.fillStyle = 'rgba(245,241,230,.28)';
     if (W >= 760) {
       ctx.font = '500 8px Inter, sans-serif';
       ctx.textAlign = 'left';
-      ctx.fillStyle = 'rgba(245,241,230,.28)';
-      ['MEETINGS', 'VOICE NOTES', 'MESSAGES', 'IDEAS'].forEach((label, i) => {
+      sourceLabels.forEach((label, i) => {
         ctx.fillText(label, 24, H * (.27 + i * .17));
       });
+    } else {
+      // Phones: one row in the gap between the hero button and the phone mockup.
+      ctx.font = '500 8px Inter, sans-serif';
+      ctx.textAlign = 'center';
+      const gap = Math.min(84, (W - 32) / sourceLabels.length);
+      const startX = focus.x - gap * (sourceLabels.length - 1) / 2;
+      sourceLabels.forEach((label, i) => ctx.fillText(label, startX + gap * i, mobileLabelY));
     }
     ctx.restore();
   }
@@ -299,6 +321,6 @@
   });
 
   /* re-measure anchors once fonts/layout settle */
-  addEventListener('load', measure);
-  document.fonts?.ready.then(measure);
+  addEventListener('load', () => { measure(); seedFlow(); });
+  document.fonts?.ready.then(() => { measure(); seedFlow(); });
 })();
