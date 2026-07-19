@@ -94,8 +94,13 @@ Two families, strict roles. Same pairing on web and iOS:
 
 | Role | Web | iOS |
 |---|---|---|
-| Display (page titles, section titles, stat numerals, editorial moments) | **Source Serif 4** | **New York** |
+| Display (page titles, section titles, stat numerals, editorial moments) | **Fraunces** (Google Fonts, variable opsz/wght) | **Fraunces** (bundle the variable font) — do NOT substitute New York |
 | Everything else (body, labels, buttons, tables, inputs) | **Inter** | **SF Pro** |
+
+> **Deprecated: Source Serif 4** (and any Tiempos-like serif). It reads as
+> Claude/Anthropic's document voice, which their products now own. Air Note's
+> serif is Fraunces — warmer, rounder, unmistakably not a Claude document.
+> Replace Source Serif 4 anywhere it survives.
 
 Scale (web reference, adapt proportionally on iOS):
 
