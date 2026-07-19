@@ -98,19 +98,24 @@ Keep visualisation basic — a clean table or simple bars is enough for v1; no c
 
 ## 5. Visual style
 
-Reuse the app's settled design system exactly — same brand, same tokens, don't invent a new look for this:
+> **⚠️ Superseded.** The palette that used to live here (paper/cream with a
+> terracotta accent) is deprecated for ALL product UI. The dashboard now uses
+> the white / light-blue / navy product system defined in
+> **`docs/BRAND_GUIDELINES.md` — that document is the single source of truth**
+> for colors, typography, shapes, and motion. Any older doc that lists
+> terracotta or paper as app colors (including `air-note/docs/design-system.html`
+> and the app repo's Product Spec §1.2) is out of date and should be brought in
+> line with BRAND_GUIDELINES.md, not the other way round.
 
-| Role | Value |
-|---|---|
-| Paper (background) | `#F5F1E6` |
-| Card surface | `#FDFAF2` |
-| Hairline border | `#E5DFCE` |
-| Ink (primary text) | `#0F2438` |
-| Body text | `#5F5B4E` |
-| Muted text | `#9A937F` |
-| Accent — terracotta | `#C96F3F` *(once per screen max, sparingly — a highlighted KPI number, not decoration)* |
+Summary (see BRAND_GUIDELINES.md for the full tables): page bg `#F4F7FA`, white
+floating content sheet, tonal borderless cards `#F3F7FB`, ink `#0F2438`, slate
+body text `#3F566B`, blue accent `#2E5E8E`, sky `#7FA6C7` focus rings.
+**No terracotta anywhere in product UI.**
 
-Typography: **Source Serif 4** for page/section titles (the web equivalent of the app's New York), **Inter** for everything else — labels, table text, buttons. Sentence case throughout, no ALL CAPS. Pill buttons, 16px card radius, 0.5px hairline borders, no heavy drop shadows. Reference `air-note/docs/design-system.html` and the palette table in `air-note/docs/Product Spec/documentation` §1.2 directly before building — those are the source of truth, not this spec.
+Typography: **Source Serif 4** for page/section titles and stat numerals (the
+web equivalent of the app's New York), **Inter** for everything else. Sentence
+case throughout, no ALL CAPS. Pill buttons and inputs, 20px card radius,
+borderless tonal cards, soft navy-tinted shadows.
 
 Light mode only for v1 (matches the app's stance — light is home base).
 
