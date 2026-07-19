@@ -112,8 +112,9 @@ floating content sheet, tonal borderless cards `#F3F7FB`, ink `#0F2438`, slate
 body text `#3F566B`, blue accent `#2E5E8E`, sky `#7FA6C7` focus rings.
 **No terracotta anywhere in product UI.**
 
-Typography: **Source Serif 4** for page/section titles and stat numerals (the
-web equivalent of the app's New York), **Inter** for everything else. Sentence
+Typography: **Fraunces** for page/section titles and stat numerals, **Inter**
+for everything else (Source Serif 4 is retired brand-wide — see
+BRAND_GUIDELINES.md §2). Sentence
 case throughout, no ALL CAPS. Pill buttons and inputs, 20px card radius,
 borderless tonal cards, soft navy-tinted shadows.
 

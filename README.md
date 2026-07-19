@@ -34,7 +34,7 @@ One scroll, three acts: night hero → the sky literally brightens through dawn 
 > no paper**. Don't carry this file's palette into any app or dashboard work.
 
 - Tokens in `:root` are the brand — don't invent colours. Terracotta (`--accent`) appears **once per viewport, max** (marketing pages only — never in product UI).
-- Serif (`Source Serif 4`) for H1/H2/pull-quotes only; Inter for everything else. Sentence case everywhere.
+- Serif (`Fraunces`) for H1/H2/pull-quotes only; Inter for everything else. Sentence case everywhere. (Source Serif 4 is retired brand-wide — too close to Claude's document look.)
 - One easing: `cubic-bezier(0.22, 1, 0.36, 1)`. Ambient loops 6–14s. Nothing bounces.
 - Animate only `transform`/`opacity`.
 - `prefers-reduced-motion` must keep working (ambient loops stop, reveals become fades).
