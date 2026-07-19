@@ -28,7 +28,12 @@ One scroll, three acts: night hero → the sky literally brightens through dawn 
 
 ## Rules if you're editing
 
-- Tokens in `:root` are the brand — don't invent colours. Terracotta (`--accent`) appears **once per viewport, max**.
+> **Scope note:** these rules cover the *marketing site and journal only*.
+> Product UI (the iPhone app, the admin dashboard) follows
+> **`docs/BRAND_GUIDELINES.md`** — white/light-blue/navy, **no terracotta,
+> no paper**. Don't carry this file's palette into any app or dashboard work.
+
+- Tokens in `:root` are the brand — don't invent colours. Terracotta (`--accent`) appears **once per viewport, max** (marketing pages only — never in product UI).
 - Serif (`Source Serif 4`) for H1/H2/pull-quotes only; Inter for everything else. Sentence case everywhere.
 - One easing: `cubic-bezier(0.22, 1, 0.36, 1)`. Ambient loops 6–14s. Nothing bounces.
 - Animate only `transform`/`opacity`.
