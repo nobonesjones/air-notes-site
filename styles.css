@@ -171,16 +171,19 @@ h2 { font-size: clamp(2rem, 4vw, 3.25rem); line-height: 1.12; margin-bottom: 22p
 .hero {
   min-height: 100svh;
   display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
-  text-align: center; padding: 150px 0 120px;
+  /* Vertical rhythm is viewport-relative so the whole hero scales with screen
+     height — the phone peeks a consistent amount on a short laptop and a tall
+     display alike, instead of drifting with fixed pixels. */
+  text-align: center; padding: clamp(90px, 12vh, 150px) 0 clamp(56px, 8vh, 120px);
 }
 .hero .sub {
-  max-width: 34em; margin: 26px auto 0;
+  max-width: 34em; margin: clamp(16px, 2.2vh, 28px) auto 0;
   font-size: clamp(1.02rem, 1.6vw, 1.2rem);
   color: rgba(245,241,230,.75);
 }
 .hero .cta-row {
   display: flex; align-items: center; justify-content: center;
-  margin-top: clamp(96px, 12vh, 116px);
+  margin-top: clamp(64px, 11vh, 128px);
 }
 @media (max-width: 720px) {
   .hero { padding: 118px 0 60px; }
@@ -207,7 +210,7 @@ h2 { font-size: clamp(2rem, 4vw, 3.25rem); line-height: 1.12; margin-bottom: 22p
 /* ============================================================
    THE PHONE — pure CSS
    ============================================================ */
-.phone-wrap { margin: 72px auto 0; position: relative; width: max-content; max-width: 100%; }
+.phone-wrap { margin: clamp(56px, 9vh, 112px) auto 0; position: relative; width: max-content; max-width: 100%; }
 @media (max-width: 720px) { .phone-wrap { margin-top: 44px; } }
 .phone-wrap.levitate { animation: levitate 6s ease-in-out infinite; }
 @keyframes levitate {
