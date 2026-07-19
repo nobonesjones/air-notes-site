@@ -324,18 +324,152 @@
     });
   }
 
-  /* ---------- email form ---------- */
-  const form = $('#ctaForm'), input = $('#email'), btn = $('#ctaBtn');
-  form.addEventListener('submit', e => {
-    e.preventDefault();
-    const ok = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(input.value.trim());
-    input.classList.toggle('invalid', !ok);
-    if (!ok) { input.focus(); return; }
-    btn.querySelector('.btn-label').textContent = "You're on the list ✓";
-    btn.classList.add('swept');
-    btn.disabled = true;
-    input.disabled = true;
-    setTimeout(() => btn.classList.remove('swept'), 1000);
+  /* ---------- early access signup ---------- */
+  const signup = $('#signup');
+  const signupDialog = $('.signup-dialog', signup);
+  const signupForm = $('#signupForm');
+  const signupSteps = $$('.signup-step', signup);
+  const signupBack = $('#signupBack');
+  const signupFooter = $('#signupFooter');
+  const signupProgress = $('#signupProgress');
+  const signupStepLabel = $('#signupStepLabel');
+  const signupSuccess = $('#signupSuccess');
+  const signupEmail = $('#signupEmail');
+  const signupConsent = $('#signupConsent');
+  const signupSubmit = $('#signupSubmit');
+  const signupError = $('#signupError');
+  const answers = {};
+  let signupStep = 0;
+  let previousFocus = null;
+
+  const config = window.AIRNOTE_SUPABASE;
+  const supabaseClient = window.supabase && config
+    ? window.supabase.createClient(config.url, config.anonKey, {
+        auth: { persistSession: false, autoRefreshToken: false }
+      })
+    : null;
+
+  const params = new URLSearchParams(location.search);
+  const attribution = {
+    utm_source: params.get('utm_source'),
+    utm_medium: params.get('utm_medium'),
+    utm_campaign: params.get('utm_campaign'),
+    utm_content: params.get('utm_content'),
+    utm_term: params.get('utm_term'),
+    landing_page: location.href.split('#')[0],
+    referrer: document.referrer || null
+  };
+  const signupSession = sessionStorage.getItem('airnote_signup_session') || crypto.randomUUID();
+  sessionStorage.setItem('airnote_signup_session', signupSession);
+
+  async function trackSignup(eventName, stepName = null) {
+    if (!supabaseClient) return;
+    try {
+      await supabaseClient.from('early_access_events').insert({
+        session_id: signupSession,
+        event_name: eventName,
+        step_name: stepName,
+        properties: attribution
+      });
+    } catch (_) { /* Analytics must never interrupt the signup. */ }
+  }
+
+  function showSignupStep(index) {
+    signupStep = Math.max(0, Math.min(index, signupSteps.length - 1));
+    signupSteps.forEach((step, i) => step.classList.toggle('is-active', i === signupStep));
+    signupProgress.style.width = `${((signupStep + 1) / signupSteps.length) * 100}%`;
+    signupStepLabel.textContent = `A few quick questions · ${signupStep + 1} of ${signupSteps.length}`;
+    signupBack.disabled = signupStep === 0;
+    const active = signupSteps[signupStep];
+    const selected = $('.choice.is-selected', active);
+    (selected || $('.choice, input', active))?.focus({ preventScroll: true });
+    trackSignup('signup_step_viewed', active.dataset.step);
+  }
+
+  function openSignup(event) {
+    event?.preventDefault();
+    previousFocus = document.activeElement;
+    signup.classList.add('is-open');
+    signup.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('signup-open');
+    showSignupStep(signupStep);
+    requestAnimationFrame(() => signupDialog.focus({ preventScroll: true }));
+    trackSignup('signup_opened');
+  }
+
+  function closeSignup() {
+    signup.classList.remove('is-open');
+    signup.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('signup-open');
+    previousFocus?.focus?.();
+  }
+
+  $$('[data-signup-open]').forEach(trigger => trigger.addEventListener('click', openSignup));
+  $$('[data-signup-close]').forEach(trigger => trigger.addEventListener('click', closeSignup));
+  signupBack.addEventListener('click', () => showSignupStep(signupStep - 1));
+
+  $$('.choice', signup).forEach(choice => choice.addEventListener('click', () => {
+    const field = choice.dataset.field;
+    answers[field] = choice.dataset.value;
+    $$(`[data-field="${field}"]`, signup).forEach(item => item.classList.toggle('is-selected', item === choice));
+    trackSignup('signup_answered', field);
+    setTimeout(() => showSignupStep(signupStep + 1), reduced ? 0 : 180);
+  }));
+
+  signupForm.addEventListener('submit', async event => {
+    event.preventDefault();
+    const email = signupEmail.value.trim().toLowerCase();
+    const validEmail = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
+    signupEmail.classList.toggle('invalid', !validEmail);
+    signupError.textContent = !validEmail ? 'Enter a valid email address.' : !signupConsent.checked ? 'Please confirm you’d like early access updates.' : '';
+    if (!validEmail) return signupEmail.focus();
+    if (!signupConsent.checked) return signupConsent.focus();
+    if (!supabaseClient) {
+      signupError.textContent = 'Signup is temporarily unavailable. Please try again shortly.';
+      return;
+    }
+
+    signupSubmit.disabled = true;
+    signupSubmit.textContent = 'Saving your place…';
+    const { error } = await supabaseClient.from('early_access_signups').insert({
+      session_id: signupSession,
+      email,
+      gender: answers.gender,
+      age_range: answers.age_range,
+      work_role: answers.work_role,
+      primary_use_case: answers.primary_use_case,
+      consent_marketing: true,
+      ...attribution,
+      user_agent: navigator.userAgent,
+      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+    });
+
+    if (error) {
+      signupSubmit.disabled = false;
+      signupSubmit.textContent = 'Join the early access list';
+      signupError.textContent = error.code === '23505'
+        ? 'That email is already on the early access list.'
+        : 'We couldn’t save your place. Please try again.';
+      return;
+    }
+
+    trackSignup('signup_completed', 'email');
+    signupSteps.forEach(step => step.classList.remove('is-active'));
+    signupSuccess.classList.add('is-active');
+    signupStepLabel.textContent = 'Early access confirmed';
+    signupProgress.style.width = '100%';
+    signupFooter.hidden = true;
+  });
+
+  document.addEventListener('keydown', event => {
+    if (!signup.classList.contains('is-open')) return;
+    if (event.key === 'Escape') closeSignup();
+    if (event.key !== 'Tab') return;
+    const focusable = $$('button:not([disabled]), input:not([disabled])', signup).filter(el => el.offsetParent !== null);
+    if (!focusable.length) return;
+    const first = focusable[0], last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+    else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
   });
 
   /* re-measure anchors once fonts/layout settle */

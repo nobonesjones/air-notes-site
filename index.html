@@ -14,7 +14,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;1,9..144,400&family=Inter:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=2">
+<link rel="stylesheet" href="styles.css?v=3">
 </head>
 <body>
 
@@ -27,7 +27,7 @@
 <!-- nav -->
 <nav class="nav" aria-label="Main">
   <a class="wordmark" href="#top">Air Note</a>
-  <a class="nav-cta" href="#cta">Get early access</a>
+  <a class="nav-cta" href="#signup" data-signup-open>Get early access</a>
 </nav>
 
 <main id="top">
@@ -39,7 +39,7 @@
         <h1 id="h1">Bring your whole world into Claude.</h1>
         <p class="sub reveal d2">Capture meetings, voice notes, and ideas and turn them into useful context so Claude knows what you know.</p>
         <div class="cta-row reveal d3">
-          <a class="btn btn-cream magnetic" href="#cta">Get early access<span class="sweep"></span></a>
+          <a class="btn btn-cream magnetic" href="#signup" data-signup-open>Get early access<span class="sweep"></span></a>
         </div>
       </div>
 
@@ -225,11 +225,7 @@
     <div class="wrap">
       <h2 class="reveal d1">Give Claude the full picture.</h2>
       <div class="cta-card reveal d2">
-        <form class="cta-form" id="ctaForm" novalidate>
-          <label for="email" class="visually-hidden" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Email address</label>
-          <input type="email" id="email" name="email" placeholder="you@work.com" autocomplete="email" required>
-          <button type="submit" class="btn btn-cream magnetic" id="ctaBtn"><span class="btn-label">Get early access</span><span class="sweep"></span></button>
-        </form>
+        <button type="button" class="btn btn-cream magnetic cta-start" data-signup-open>Get early access<span class="sweep"></span></button>
         <p class="cta-micro">Free for early users. iPhone first.</p>
       </div>
     </div>
@@ -313,7 +309,7 @@
         <a href="#s3">Claude context</a>
         <a href="blog/index.html">Blog</a>
         <a href="#faq">Questions</a>
-        <a href="#cta">Early access</a>
+        <a href="#signup" data-signup-open>Early access</a>
       </nav>
     </div>
     <div class="footer-bottom">
@@ -322,6 +318,84 @@
     </div>
   </div>
 </footer>
+
+<div class="signup-modal" id="signup" aria-hidden="true">
+  <div class="signup-backdrop" data-signup-close></div>
+  <section class="signup-dialog" role="dialog" aria-modal="true" aria-labelledby="signupTitle" tabindex="-1">
+    <button class="signup-close" type="button" data-signup-close aria-label="Close signup">×</button>
+    <div class="signup-progress" aria-hidden="true"><span id="signupProgress"></span></div>
+    <p class="signup-kicker" id="signupStepLabel">A few quick questions · 1 of 5</p>
+    <form id="signupForm" novalidate>
+      <div class="signup-step is-active" data-step="gender">
+        <h2 id="signupTitle">First, how do you describe yourself?</h2>
+        <p>This helps us understand who our early audience is.</p>
+        <div class="choice-grid">
+          <button type="button" class="choice" data-field="gender" data-value="Male">Male</button>
+          <button type="button" class="choice" data-field="gender" data-value="Female">Female</button>
+          <button type="button" class="choice" data-field="gender" data-value="Non-binary">Non-binary</button>
+          <button type="button" class="choice" data-field="gender" data-value="Prefer not to say">Prefer not to say</button>
+        </div>
+      </div>
+
+      <div class="signup-step" data-step="age_range">
+        <h2>What’s your age range?</h2>
+        <p>Choose the closest fit.</p>
+        <div class="choice-grid choice-grid--three">
+          <button type="button" class="choice" data-field="age_range" data-value="18–24">18–24</button>
+          <button type="button" class="choice" data-field="age_range" data-value="25–34">25–34</button>
+          <button type="button" class="choice" data-field="age_range" data-value="35–44">35–44</button>
+          <button type="button" class="choice" data-field="age_range" data-value="45–54">45–54</button>
+          <button type="button" class="choice" data-field="age_range" data-value="55+">55+</button>
+          <button type="button" class="choice" data-field="age_range" data-value="Prefer not to say">Prefer not to say</button>
+        </div>
+      </div>
+
+      <div class="signup-step" data-step="work_role">
+        <h2>Which best describes your work?</h2>
+        <p>We’ll shape the first version around the people using it.</p>
+        <div class="choice-grid">
+          <button type="button" class="choice" data-field="work_role" data-value="Founder or business owner">Founder or business owner</button>
+          <button type="button" class="choice" data-field="work_role" data-value="Sales or client services">Sales or client services</button>
+          <button type="button" class="choice" data-field="work_role" data-value="Manager or team lead">Manager or team lead</button>
+          <button type="button" class="choice" data-field="work_role" data-value="Independent professional">Independent professional</button>
+          <button type="button" class="choice choice--wide" data-field="work_role" data-value="Something else">Something else</button>
+        </div>
+      </div>
+
+      <div class="signup-step" data-step="primary_use_case">
+        <h2>What would you most like Air Note to remember?</h2>
+        <p>Pick the one that matters most right now.</p>
+        <div class="choice-grid">
+          <button type="button" class="choice" data-field="primary_use_case" data-value="In-person meetings">In-person meetings</button>
+          <button type="button" class="choice" data-field="primary_use_case" data-value="Calls and online meetings">Calls and online meetings</button>
+          <button type="button" class="choice" data-field="primary_use_case" data-value="Voice notes and ideas">Voice notes and ideas</button>
+          <button type="button" class="choice" data-field="primary_use_case" data-value="Messages and follow-ups">Messages and follow-ups</button>
+        </div>
+      </div>
+
+      <div class="signup-step" data-step="email">
+        <h2>Where should we send your invite?</h2>
+        <p>You’re one step away. Air Note is launching on iPhone first.</p>
+        <label class="signup-label" for="signupEmail">Email address</label>
+        <input class="signup-email" type="email" id="signupEmail" name="email" placeholder="you@work.com" autocomplete="email" required>
+        <label class="signup-consent"><input type="checkbox" id="signupConsent" required> <span>I’d like early access updates from Air Note.</span></label>
+        <p class="signup-error" id="signupError" role="alert"></p>
+        <button type="submit" class="btn signup-submit" id="signupSubmit">Join the early access list</button>
+      </div>
+
+      <div class="signup-success" id="signupSuccess" aria-live="polite">
+        <span class="signup-success-mark">✓</span>
+        <h2>You’re on the list.</h2>
+        <p>Thanks for helping shape Air Note. We’ll be in touch when your place is ready.</p>
+        <button type="button" class="btn signup-submit" data-signup-close>Done</button>
+      </div>
+    </form>
+    <div class="signup-footer" id="signupFooter">
+      <button type="button" class="signup-back" id="signupBack" disabled>Back</button>
+      <span>Your answers stay private.</span>
+    </div>
+  </section>
+</div>
 
 <script type="application/ld+json">
 {
@@ -372,6 +446,8 @@
 }
 </script>
 
-<script src="app.js?v=2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="app.js?v=3"></script>
 </body>
 </html>

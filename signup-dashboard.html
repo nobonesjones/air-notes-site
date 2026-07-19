@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Early access dashboard | Air Note</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="signup-dashboard.css">
+</head>
+<body>
+  <main class="dashboard-shell">
+    <section class="login-card" id="dashboardLogin">
+      <a class="dashboard-brand" href="index.html">Air Note</a>
+      <p class="eyebrow">Private dashboard</p>
+      <h1>Early access signups</h1>
+      <p>Sign in with an approved Air Note admin account.</p>
+      <form id="loginForm">
+        <label for="adminEmail">Email address</label>
+        <input id="adminEmail" type="email" autocomplete="email" required>
+        <label for="adminPassword">Password</label>
+        <input id="adminPassword" type="password" autocomplete="current-password" required>
+        <p class="form-error" id="loginError" role="alert"></p>
+        <button type="submit">Sign in</button>
+      </form>
+    </section>
+
+    <section class="dashboard" id="dashboard" hidden>
+      <header class="dashboard-head">
+        <div><p class="eyebrow">Air Note</p><h1>Early access</h1></div>
+        <div class="head-actions"><button id="exportCsv" class="secondary">Export CSV</button><button id="signOut" class="secondary">Sign out</button></div>
+      </header>
+      <div class="metrics">
+        <article><span>Total signups</span><strong id="totalSignups">—</strong></article>
+        <article><span>Form starts</span><strong id="formStarts">—</strong></article>
+        <article><span>Conversion rate</span><strong id="conversionRate">—</strong></article>
+        <article><span>Paid signups</span><strong id="paidSignups">—</strong></article>
+      </div>
+      <div class="table-tools">
+        <label><span class="sr-only">Search submissions</span><input id="signupSearch" type="search" placeholder="Search email, role or campaign"></label>
+        <span id="tableCount"></span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Date</th><th>Email</th><th>Gender</th><th>Age</th><th>Work</th><th>Use case</th><th>Source</th><th>Campaign</th><th>Timezone</th></tr></thead>
+          <tbody id="signupRows"></tbody>
+        </table>
+        <p class="empty" id="emptyState" hidden>No submissions match this search.</p>
+      </div>
+    </section>
+  </main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="signup-dashboard.js"></script>
+</body>
+</html>
