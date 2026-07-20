@@ -98,25 +98,21 @@ Keep visualisation basic — a clean table or simple bars is enough for v1; no c
 
 ## 5. Visual style
 
-> **⚠️ Superseded.** The palette that used to live here (paper/cream with a
-> terracotta accent) is deprecated for ALL product UI. The dashboard now uses
-> the white / light-blue / navy product system defined in
-> **`docs/BRAND_GUIDELINES.md` — that document is the single source of truth**
-> for colors, typography, shapes, and motion. Any older doc that lists
-> terracotta or paper as app colors (including `air-note/docs/design-system.html`
-> and the app repo's Product Spec §1.2) is out of date and should be brought in
-> line with BRAND_GUIDELINES.md, not the other way round.
+**Updated 19 July 2026 — the palette below is outdated, corrected here.** The app went through a design pivot: the warm paper/terracotta palette originally cited turned out to be the *editorial* world only (marketing site + Journal), never product UI. This admin dashboard is product UI — the "the iPhone app, the admin dashboard, and any interface a user operates" — so it follows the cool product palette instead. Source of truth: **`air-note/docs/newdesignsystem.md`** ("Spark"). Don't reference `air-note/docs/design-system.html` or `air-note/docs/Product Spec/documentation` §1.2 — both are stale on this point.
 
-Summary (see BRAND_GUIDELINES.md for the full tables): page bg `#F4F7FA`, white
-floating content sheet, tonal borderless cards `#F3F7FB`, ink `#0F2438`, slate
-body text `#3F566B`, blue accent `#2E5E8E`, sky `#7FA6C7` focus rings.
-**No terracotta anywhere in product UI.**
+Key values as of 19 July 2026 (confirm against `newdesignsystem.md` directly before building, in case they've moved again):
 
-Typography: **Fraunces** for page/section titles and stat numerals, **Inter**
-for everything else (Source Serif 4 is retired brand-wide — see
-BRAND_GUIDELINES.md §2). Sentence
-case throughout, no ALL CAPS. Pill buttons and inputs, 20px card radius,
-borderless tonal cards, soft navy-tinted shadows.
+| Role | Value |
+|---|---|
+| Background | `#FCFCFD` |
+| Card/sheet surface | `#FFFFFF`, 1px `#ECEDF0` border |
+| Ink (primary text) | `#1D2430` |
+| Body text | `#5B6270` |
+| Muted text | `#79808C` |
+| Brand navy | `#16283A` (primary actions/emphasis) |
+| Ember accent | `#D96C3D` *(tiny garnish only — a small dot or one highlighted value; never a button, never a fill, never decoration)* |
+
+Typography: **Source Serif 4** for greeting/hero moments only, system sans (`-apple-system`/Inter equivalent) for everything else — labels, table text, buttons. Sentence case throughout, no ALL CAPS. 18px card radius, 16px radius on labeled buttons (not a full pill — only chips/inputs/circular controls are fully rounded), soft navy-tinted shadows.
 
 Light mode only for v1 (matches the app's stance — light is home base).
 
