@@ -5,5 +5,9 @@
     { "source": "/.well-known/oauth-authorization-server/mcp", "destination": "https://pukxgbtwamgifdjhyckb.supabase.co/functions/v1/mcp-server/.well-known/oauth-authorization-server" },
     { "source": "/.well-known/oauth-authorization-server", "destination": "https://pukxgbtwamgifdjhyckb.supabase.co/functions/v1/mcp-server/.well-known/oauth-authorization-server" },
     { "source": "/.well-known/oauth-protected-resource/mcp", "destination": "https://pukxgbtwamgifdjhyckb.supabase.co/functions/v1/mcp-server/.well-known/oauth-protected-resource" }
+  ],
+  "headers": [
+    { "source": "/mcp/authorize", "headers": [ { "key": "Content-Type", "value": "text/html; charset=utf-8" } ] },
+    { "source": "/mcp/authorize/complete", "headers": [ { "key": "Content-Type", "value": "text/html; charset=utf-8" } ] }
   ]
 }
