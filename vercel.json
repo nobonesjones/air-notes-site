@@ -1,6 +1,9 @@
 {
   "rewrites": [
     { "source": "/mcp", "destination": "https://pukxgbtwamgifdjhyckb.supabase.co/functions/v1/mcp-server" },
-    { "source": "/mcp/:path*", "destination": "https://pukxgbtwamgifdjhyckb.supabase.co/functions/v1/mcp-server/:path*" }
+    { "source": "/mcp/:path*", "destination": "https://pukxgbtwamgifdjhyckb.supabase.co/functions/v1/mcp-server/:path*" },
+    { "source": "/.well-known/oauth-authorization-server/mcp", "destination": "https://pukxgbtwamgifdjhyckb.supabase.co/functions/v1/mcp-server/.well-known/oauth-authorization-server" },
+    { "source": "/.well-known/oauth-authorization-server", "destination": "https://pukxgbtwamgifdjhyckb.supabase.co/functions/v1/mcp-server/.well-known/oauth-authorization-server" },
+    { "source": "/.well-known/oauth-protected-resource/mcp", "destination": "https://pukxgbtwamgifdjhyckb.supabase.co/functions/v1/mcp-server/.well-known/oauth-protected-resource" }
   ]
 }
