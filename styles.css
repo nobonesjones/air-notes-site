@@ -337,8 +337,15 @@ body.signup-open { overflow: hidden; }
   text-align: left;
 }
 
+/* real app screenshots — the OS status-bar band is flattened in the asset,
+   so .phone .island supplies the cutout and the shot sits flush in the screen */
+.pshot {
+  display: block; width: 100%; height: 100%;
+  object-fit: cover; object-position: top center;
+}
+
 /* screen states */
-.pscreen { position: absolute; inset: 0; padding: 58px 15px 14px; display: flex; flex-direction: column; gap: 8px; opacity: 0; transition: opacity .7s var(--ease); }
+.pscreen { position: absolute; inset: 0; opacity: 0; transition: opacity .7s var(--ease); }
 .pscreen.active { opacity: 1; }
 
 .p-day-title { font-family: var(--serif); font-size: 25px; color: var(--ink); line-height: 1.1; }
@@ -403,6 +410,9 @@ body.signup-open { overflow: hidden; }
 }
 
 .benefit { min-height: 88vh; display: flex; flex-direction: column; justify-content: center; padding: 60px 0; }
+/* unshipped feature — deliberately quieter than the three shipped pillars */
+.benefit--soon { min-height: 0; padding: 20px 0 80px; opacity: .82; }
+.benefit--soon h2 { font-size: clamp(1.4rem, 2.4vw, 1.9rem); }
 .benefit h2 { color: var(--ink); }
 .benefit .copy { color: var(--body); max-width: 34em; font-size: clamp(1rem, 1.4vw, 1.13rem); }
 

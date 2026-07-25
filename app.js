@@ -229,7 +229,7 @@
 
     // Source labels run down the left edge near where the streams originate —
     // same treatment on mobile as desktop, just tucked closer to the edge.
-    const sourceLabels = ['MEETINGS', 'VOICE NOTES', 'MESSAGES', 'IDEAS'];
+    const sourceLabels = ['MEETINGS', 'VOICE NOTES', 'NOTES', 'IDEAS'];
     ctx.globalAlpha = flowAlpha;
     ctx.fillStyle = 'rgba(245,241,230,.28)';
     ctx.font = '500 8px Inter, sans-serif';

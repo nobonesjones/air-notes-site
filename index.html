@@ -3,18 +3,18 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Air Note | Capture meetings, voice notes and ideas for Claude</title>
-<meta name="description" content="Air Note captures meetings, voice notes, ideas and messages in one place, then turns them into useful context for Claude.">
+<title>Air Note | Record the meeting. Ask Claude what happened.</title>
+<meta name="description" content="Air Note records the conversations you have in person and turns them into clear notes, decisions and next steps. Connect it to Claude once, and Claude can answer from everything you've recorded.">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Air Note | Bring your whole world into Claude">
-<meta property="og:description" content="Capture meetings, voice notes, ideas and messages in one place, then turn them into useful context for Claude.">
+<meta property="og:title" content="Air Note | Record the meeting. Ask Claude what happened.">
+<meta property="og:description" content="A meeting recorder for people who run their work through Claude. No bot joins the room.">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Air Note | Bring your whole world into Claude">
-<meta name="twitter:description" content="Capture meetings, voice notes, ideas and messages in one place, then turn them into useful context for Claude.">
+<meta name="twitter:title" content="Air Note | Record the meeting. Ask Claude what happened.">
+<meta name="twitter:description" content="A meeting recorder for people who run their work through Claude. No bot joins the room.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;1,9..144,400&family=Inter:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=4">
+<link rel="stylesheet" href="styles.css?v=5">
 </head>
 <body>
 
@@ -36,62 +36,18 @@
   <header class="hero" id="hero">
     <div class="wrap">
       <div class="hero-copy">
-        <h1 id="h1">Bring your whole world into Claude.</h1>
-        <p class="sub reveal d2">Capture meetings, voice notes, and ideas and turn them into useful context so Claude knows what you know.</p>
+        <h1 id="h1">Forget the meeting. Claude won’t.</h1>
+        <p class="sub reveal d2">Air Note records the conversations you have in person and turns them into clear notes, decisions and next steps. Connect it to Claude once, and Claude can answer from everything you’ve recorded.</p>
         <div class="cta-row reveal d3">
           <a class="btn btn-cream magnetic" href="#signup" data-signup-open>Get early access<span class="sweep"></span></a>
         </div>
       </div>
 
       <div class="phone-wrap levitate reveal d3">
-        <div class="phone" role="img" aria-label="Air Note app showing your captures organised into the Today feed">
+        <div class="phone">
           <span class="island"></span>
           <div class="screen">
-            <!-- state 1: Today feed -->
-            <div class="pscreen active" data-state="feed">
-              <div class="p-day-title">Today</div>
-              <div class="p-date">Friday 18 July · 4 captures</div>
-              <div class="p-card">
-                <div class="t"><b>Meeting with Toby: offplan stock</b><time>2:41 pm</time></div>
-                <p>Handover moves to the 24th; plans due Friday.</p>
-                <div class="p-chips"><span class="chip ochre">Savills</span><span class="chip slate">Toby</span><span class="p-min">18 min</span></div>
-              </div>
-              <div class="p-card">
-                <div class="t"><b>Idea: pricing page</b><time>11:20 am</time></div>
-                <p>Anchor annual. Trial copy: free for friends.</p>
-              </div>
-              <div class="p-card">
-                <div class="t"><b>WhatsApp from Zofia</b><time>9:04 am</time></div>
-                <p>Contract notes forwarded in.</p>
-              </div>
-              <div class="p-askbar">
-                <span>Ask anything</span>
-                <span class="p-rec"><svg fill="none" stroke-width="1.8" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3" stroke-linecap="round"/></svg></span>
-              </div>
-            </div>
-            <!-- state 2: processed recording -->
-            <div class="pscreen" data-state="processed">
-              <div class="p-proc-title">Meeting with Toby: offplan stock</div>
-              <div class="p-meta">Friday 18 July · 2:41 pm · 18 min</div>
-              <div class="p-chips"><span class="chip ochre">Savills</span><span class="chip slate">Toby</span></div>
-              <div class="p-tldr">Handover confirmed for the 24th. Revised floor plans to Toby before Friday; deposit terms unchanged.</div>
-              <div class="p-sec">Decisions</div>
-              <div class="p-li">• Handover moves to the 24th</div>
-              <div class="p-li">• Keys through the agency</div>
-              <div class="p-sec">Next steps</div>
-              <div class="p-li">• Send revised floor plans by Fri</div>
-              <div class="p-li">• Confirm handover time</div>
-              <div class="p-share">Share</div>
-            </div>
-            <!-- state 3: ask-anything answer -->
-            <div class="pscreen" data-state="ask">
-              <div class="p-day-title" style="font-size:19px">Ask</div>
-              <div class="p-q">What did Toby ask me to send?</div>
-              <div class="p-a">The revised floor plans before Friday. From your handover call on the 18th. Deposit terms stay as agreed.</div>
-              <div class="p-src">Sources</div>
-              <div class="p-chips"><span class="chip ochre">Handover call · 18 Jul</span><span class="chip slate">Site visit · 15 Jul</span></div>
-              <div class="p-askbar"><span>Ask another question…</span><span class="p-rec"><svg fill="none" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 19V6M6 12l6-6 6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
-            </div>
+            <img class="pshot" src="assets/app/today.webp" width="660" height="1435" alt="The Air Note app on an iPhone, showing today's recordings and notes with an ask box at the bottom." fetchpriority="high" decoding="async">
           </div>
         </div>
       </div>
@@ -104,52 +60,52 @@
     <div class="wrap act2-grid">
       <div class="benefit-col">
 
-        <section class="benefit" id="s1" data-phone="processed">
-          <p class="eyebrow reveal d1">Capture real life as it happens.</p>
-          <h2 class="reveal d2">Walk out with every detail. Write nothing down.</h2>
-          <p class="copy reveal d3">Tap record and give the conversation your full attention. Air Note turns it into clear notes, decisions and next steps, ready to use the moment the meeting ends.</p>
+        <section class="benefit" id="s1" data-phone="today">
+          <p class="eyebrow reveal d1">In person</p>
+          <h2 class="reveal d2">No bot in the room.</h2>
+          <p class="copy reveal d3">Open the app, tap record and put the phone down. Nothing joins the call. Nothing to explain to the person across the table.</p>
           <div class="phone-inline reveal d3">
-            <div class="phone" role="img" aria-label="A processed recording with its title, summary, decisions and next steps ready to share">
+            <div class="phone">
               <span class="island"></span>
               <div class="screen">
-                <div class="pscreen active">
-                  <div class="p-proc-title">Meeting with Toby: offplan stock</div>
-                  <div class="p-meta">Friday 18 July · 2:41 pm · 18 min</div>
-                  <div class="p-chips"><span class="chip ochre">Savills</span><span class="chip slate">Toby</span></div>
-                  <div class="p-tldr">Handover confirmed for the 24th. Revised floor plans to Toby before Friday.</div>
-                  <div class="p-sec">Next steps</div>
-                  <div class="p-li">• Send revised floor plans by Fri</div>
-                  <div class="p-li">• Confirm handover time</div>
-                  <div class="p-share">Share</div>
-                </div>
+                <img class="pshot" src="assets/app/today.webp" width="660" height="1435" alt="The Air Note app showing today's recordings and notes." loading="lazy" decoding="async">
               </div>
             </div>
           </div>
         </section>
 
-        <section class="benefit" id="s2" data-phone="feed">
-          <h2 class="reveal d1">Send anything to one place.</h2>
-          <p class="copy reveal d2">Message a thought. Send a voice note from the car. Forward the important stuff. Air Note captures it all through WhatsApp, so nothing gets lost before Claude can use it.</p>
-          <div class="chat-card reveal d3" role="img" aria-label="A chat with Air Note: a forwarded thought and a voice note, each confirmed as captured and filed">
-            <div class="bub out">meeting with toby moved to tuesday</div>
-            <div class="bub in-b"><span class="tick">Captured ✓</span> and filed to Savills</div>
-            <div class="bub out voice">
-              <svg width="14" height="14" fill="none" stroke="#44603F" stroke-width="1.8" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-              <span class="bars"><i style="height:6px"></i><i style="height:12px"></i><i style="height:9px"></i><i style="height:14px"></i><i style="height:7px"></i><i style="height:11px"></i><i style="height:5px"></i><i style="height:9px"></i></span>
-              <span style="font-size:12px;opacity:.7">0:42</span>
+        <section class="benefit" id="s2" data-phone="meeting">
+          <p class="eyebrow reveal d1">Afterwards</p>
+          <h2 class="reveal d1">Walk out with the details.</h2>
+          <p class="copy reveal d2">Notes, decisions and next steps, ready by the time you’re out the door. You didn’t write anything down.</p>
+          <div class="phone-inline reveal d3">
+            <div class="phone">
+              <span class="island"></span>
+              <div class="screen">
+                <img class="pshot" src="assets/app/meeting.webp" width="660" height="1435" alt="A recorded meeting in Air Note, with a summary, a list of actions and the topics that came up." loading="lazy" decoding="async">
+              </div>
             </div>
-            <div class="bub in-b"><span class="tick">Captured ✓</span> and added to today</div>
           </div>
         </section>
 
         <section class="benefit" id="s3" data-phone="ask">
-          <h2 class="reveal d1">Give Claude the context it was missing.</h2>
-          <p class="copy reveal d2">Connect Air Note to Claude once. Your meetings, messages and ideas become context it can use to answer questions, write plans and help you move work forward.</p>
-          <div class="chat-card reveal d3" role="img" aria-label="A question answered from your own captures, with the source recordings shown beneath">
-            <div class="bub out">What did Toby ask me to send?</div>
-            <div class="bub in-b">The revised floor plans before Friday. From your handover call on the 18th. Deposit terms stay as agreed.</div>
-            <div class="src-chips"><span class="chip ochre">Handover call · 18 Jul</span><span class="chip slate">Site visit · 15 Jul</span></div>
+          <p class="eyebrow reveal d1">In Claude</p>
+          <h2 class="reveal d1">Claude knows what happened.</h2>
+          <p class="copy reveal d2">Connect once. Then ask Claude about any meeting, in any chat, without pasting anything in.</p>
+          <div class="phone-inline reveal d3">
+            <div class="phone">
+              <span class="island"></span>
+              <div class="screen">
+                <img class="pshot" src="assets/app/ask.webp" width="660" height="1435" alt="A question answered from your own recordings, with the notes it drew on listed underneath." loading="lazy" decoding="async">
+              </div>
+            </div>
           </div>
+        </section>
+
+        <section class="benefit benefit--soon" id="s4">
+          <p class="eyebrow reveal d1">Coming soon</p>
+          <h2 class="reveal d1">Send it a message.</h2>
+          <p class="copy reveal d2">Forwarding messages and voice notes to a private Air Note number is on the way. It isn’t built yet, so it isn’t in the app you’ll get today.</p>
         </section>
 
       </div>
@@ -159,43 +115,14 @@
           <div class="phone">
             <span class="island"></span>
             <div class="screen" id="stickyScreen">
-              <div class="pscreen active" data-state="feed">
-                <div class="p-day-title">Today</div>
-                <div class="p-date">Friday 18 July · 4 captures</div>
-                <div class="p-card">
-                  <div class="t"><b>Meeting with Toby: offplan stock</b><time>2:41 pm</time></div>
-                  <p>Handover moves to the 24th; plans due Friday.</p>
-                  <div class="p-chips"><span class="chip ochre">Savills</span><span class="chip slate">Toby</span><span class="p-min">18 min</span></div>
-                </div>
-                <div class="p-card">
-                  <div class="t"><b>Idea: pricing page</b><time>11:20 am</time></div>
-                  <p>Anchor annual. Trial copy: free for friends.</p>
-                </div>
-                <div class="p-askbar">
-                  <span>Ask anything</span>
-                  <span class="p-rec"><svg fill="none" stroke-width="1.8" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3" stroke-linecap="round"/></svg></span>
-                </div>
+              <div class="pscreen active" data-state="today">
+                <img class="pshot" src="assets/app/today.webp" width="660" height="1435" alt="" loading="lazy" decoding="async">
               </div>
-              <div class="pscreen" data-state="processed">
-                <div class="p-proc-title">Meeting with Toby: offplan stock</div>
-                <div class="p-meta">Friday 18 July · 2:41 pm · 18 min</div>
-                <div class="p-chips"><span class="chip ochre">Savills</span><span class="chip slate">Toby</span></div>
-                <div class="p-tldr">Handover confirmed for the 24th. Revised floor plans to Toby before Friday; deposit terms unchanged.</div>
-                <div class="p-sec">Decisions</div>
-                <div class="p-li">• Handover moves to the 24th</div>
-                <div class="p-li">• Keys through the agency</div>
-                <div class="p-sec">Next steps</div>
-                <div class="p-li">• Send revised floor plans by Fri</div>
-                <div class="p-li">• Confirm handover time</div>
-                <div class="p-share">Share</div>
+              <div class="pscreen" data-state="meeting">
+                <img class="pshot" src="assets/app/meeting.webp" width="660" height="1435" alt="" loading="lazy" decoding="async">
               </div>
               <div class="pscreen" data-state="ask">
-                <div class="p-day-title" style="font-size:19px">Ask</div>
-                <div class="p-q">What did Toby ask me to send?</div>
-                <div class="p-a">The revised floor plans before Friday. From your handover call on the 18th. Deposit terms stay as agreed.</div>
-                <div class="p-src">Sources</div>
-                <div class="p-chips"><span class="chip ochre">Handover call · 18 Jul</span><span class="chip slate">Site visit · 15 Jul</span></div>
-                <div class="p-askbar"><span>Ask another question…</span><span class="p-rec"><svg fill="none" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 19V6M6 12l6-6 6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+                <img class="pshot" src="assets/app/ask.webp" width="660" height="1435" alt="" loading="lazy" decoding="async">
               </div>
             </div>
           </div>
@@ -212,9 +139,9 @@
     <section class="proof">
       <div class="wrap">
         <div class="strip">
-          <div class="stat reveal d1"><div class="num"><span data-count="3">0</span><small>sec</small></div><div class="lbl">to capture a thought</div></div>
-          <div class="stat reveal d2"><div class="num"><span data-count="0">0</span><small>bots</small></div><div class="lbl">joining your calls</div></div>
-          <div class="stat reveal d3"><div class="num"><span data-count="1">0</span><small>place</small></div><div class="lbl">for Claude context</div></div>
+          <div class="stat reveal d1"><div class="num"><span data-count="0">0</span><small>bots</small></div><div class="lbl">in the room</div></div>
+          <div class="stat reveal d2"><div class="num"><span data-count="1">0</span><small>connection</small></div><div class="lbl">then it just knows</div></div>
+          <div class="stat reveal d3"><div class="num"><span data-count="3">0</span><small>steps</small></div><div class="lbl">to connect Claude</div></div>
         </div>
       </div>
     </section>
@@ -223,7 +150,7 @@
   <!-- ================= ACT III — DUSK CTA ================= -->
   <section class="cta" id="cta">
     <div class="wrap">
-      <h2 class="reveal d1">Give Claude the full picture.</h2>
+      <h2 class="reveal d1">Record your next meeting.</h2>
       <div class="cta-card reveal d2">
         <button type="button" class="btn btn-cream magnetic cta-start" data-signup-open>Get early access<span class="sweep"></span></button>
         <p class="cta-micro">Free for early users. iPhone first.</p>
@@ -237,27 +164,27 @@
       <div class="resource-head">
         <div>
           <p class="eyebrow reveal d1">Explore Air Note</p>
-          <h2 class="reveal d2" id="resources-title">A clearer way to capture and use what matters.</h2>
+          <h2 class="reveal d2" id="resources-title">Everything Air Note does.</h2>
         </div>
-        <p class="resource-summary reveal d3">Air Note brings the details scattered across conversations, voice notes and messages into one useful memory for you and Claude.</p>
+        <p class="resource-summary reveal d3">Air Note records your in-person meetings and keeps the notes where Claude can read them.</p>
       </div>
 
       <nav class="resource-groups reveal d2" aria-label="Air Note resources">
         <div class="resource-group">
-          <h3>Capture</h3>
-          <a href="#s1"><strong>Meeting notes</strong><span>Record conversations and leave with the details, decisions and next steps.</span></a>
-          <a href="#s2"><strong>Voice notes and ideas</strong><span>Save thoughts as soon as they happen, wherever you are.</span></a>
+          <h3>Record</h3>
+          <a href="#s1"><strong>Meetings</strong><span>Record the conversation and leave with the details, decisions and next steps.</span></a>
+          <a href="#s2"><strong>Voice notes and ideas</strong><span>Save a thought as soon as you have it, wherever you are.</span></a>
         </div>
         <div class="resource-group">
           <h3>Connect</h3>
-          <a href="#s2"><strong>WhatsApp capture</strong><span>Forward messages, send thoughts and keep important voice notes together.</span></a>
-          <a href="#s3"><strong>Claude context</strong><span>Turn what you capture into context Claude can use in your work.</span></a>
+          <a href="#s3"><strong>Your Claude connection</strong><span>Connect once, then ask Claude about any meeting, in any chat.</span></a>
+          <a href="#s4"><strong>Messages</strong><span>Coming soon. Forwarding messages and voice notes to a private Air Note number is on the way.</span></a>
         </div>
         <div class="resource-group">
           <h3>Learn</h3>
-          <a href="blog/meeting-notes-without-a-bot.html"><strong>Meeting notes without a bot</strong><span>A practical guide to capturing decisions without adding another attendee.</span></a>
-          <a href="blog/claude-context-from-meetings.html"><strong>Build better Claude context</strong><span>Turn meetings, messages and ideas into context Claude can actually use.</span></a>
-          <a href="blog/index.html"><strong>The Air Note Journal</strong><span>Read practical ideas for building a more useful working memory.</span></a>
+          <a href="blog/meeting-notes-without-a-bot.html"><strong>Meeting notes without a bot</strong><span>A practical guide to recording decisions without adding another attendee.</span></a>
+          <a href="blog/claude-context-from-meetings.html"><strong>Getting more out of Claude</strong><span>How recorded meetings change what Claude can answer.</span></a>
+          <a href="blog/index.html"><strong>The Air Note Journal</strong><span>Practical writing on meetings, notes and working with Claude.</span></a>
         </div>
       </nav>
     </div>
@@ -272,19 +199,19 @@
       <div class="faq-list">
         <article class="faq-item reveal d1" id="faq-what">
           <h3>What does Air Note do?</h3>
-          <p>Air Note captures meetings, voice notes, ideas and messages in one place. It organizes those details into useful context you can bring into Claude.</p>
+          <p>Air Note is a meeting recorder. It records the conversations you have in person and turns them into clear notes, decisions and next steps. Connect it to Claude once, and Claude can answer from what was said.</p>
         </article>
         <article class="faq-item reveal d1" id="faq-meetings">
-          <h3>How do I capture a meeting without a bot?</h3>
-          <p>Open Air Note and tap record while the conversation is happening. Air Note creates clear notes, decisions and next steps without adding another attendee to the call.</p>
+          <h3>How do I record a meeting without a bot?</h3>
+          <p>Open Air Note, tap record and put the phone down. Nothing joins the call and there is no extra attendee to explain to the person across the table.</p>
         </article>
         <article class="faq-item reveal d1" id="faq-claude">
           <h3>Can Claude answer questions about earlier meetings?</h3>
-          <p>Yes. Once Air Note is connected, Claude can use your saved meetings, messages and ideas as context when answering questions, writing plans or helping you follow up.</p>
+          <p>Yes. Once your Claude connection is set up, Claude can answer from your recorded meetings and notes in any chat, without you pasting anything in.</p>
         </article>
-        <article class="faq-item reveal d1" id="faq-whatsapp">
-          <h3>What can I send through WhatsApp?</h3>
-          <p>You can message a thought, send a voice note or forward something important. Air Note captures it so the information is ready when you need it later.</p>
+        <article class="faq-item reveal d1" id="faq-messages">
+          <h3>Can I send messages to Air Note?</h3>
+          <p>Not yet. Forwarding messages and voice notes to a private Air Note number is on the way, and it is not part of the app today.</p>
         </article>
         <article class="faq-item reveal d1" id="faq-access">
           <h3>When is Air Note available?</h3>
@@ -301,19 +228,19 @@
     <div class="footer-main">
       <div class="footer-brand">
         <a href="#top">Air Note</a>
-        <p>Your conversations and ideas, ready for Claude.</p>
+        <p>A meeting recorder that Claude can read.</p>
       </div>
       <nav class="footer-nav" aria-label="Footer">
         <a href="#s1">Meetings</a>
-        <a href="#s2">WhatsApp</a>
-        <a href="#s3">Claude context</a>
+        <a href="#s2">Your notes</a>
+        <a href="#s3">Claude</a>
         <a href="blog/index.html">Blog</a>
         <a href="#faq">Questions</a>
         <a href="#signup" data-signup-open>Early access</a>
       </nav>
     </div>
     <div class="footer-bottom">
-      <a class="footer-est" href="admin/index.html">Est. 2026</a>
+      <span class="footer-est">Est. 2026</span>
       <a href="#top">Back to top <span aria-hidden="true">↑</span></a>
     </div>
   </div>
@@ -364,13 +291,13 @@
       </div>
 
       <div class="signup-step" data-step="primary_use_case">
-        <h2>What would you most like Air Note to remember?</h2>
+        <h2>What would you most like to record?</h2>
         <p>Pick the one that matters most right now.</p>
         <div class="choice-grid">
           <button type="button" class="choice" data-field="primary_use_case" data-value="In-person meetings">In-person meetings</button>
-          <button type="button" class="choice" data-field="primary_use_case" data-value="Calls and online meetings">Calls and online meetings</button>
+          <button type="button" class="choice" data-field="primary_use_case" data-value="Client and sales conversations">Client and sales conversations</button>
           <button type="button" class="choice" data-field="primary_use_case" data-value="Voice notes and ideas">Voice notes and ideas</button>
-          <button type="button" class="choice" data-field="primary_use_case" data-value="Messages and follow-ups">Messages and follow-ups</button>
+          <button type="button" class="choice" data-field="primary_use_case" data-value="Written notes and follow-ups">Written notes and follow-ups</button>
         </div>
       </div>
 
@@ -408,15 +335,15 @@
       "name": "What does Air Note do?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Air Note captures meetings, voice notes, ideas and messages in one place. It organizes those details into useful context you can bring into Claude."
+        "text": "Air Note is a meeting recorder. It records the conversations you have in person and turns them into clear notes, decisions and next steps. Connect it to Claude once, and Claude can answer from what was said."
       }
     },
     {
       "@type": "Question",
-      "name": "How do I capture a meeting without a bot?",
+      "name": "How do I record a meeting without a bot?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Open Air Note and tap record while the conversation is happening. Air Note creates clear notes, decisions and next steps without adding another attendee to the call."
+        "text": "Open Air Note, tap record and put the phone down. Nothing joins the call and there is no extra attendee to explain to the person across the table."
       }
     },
     {
@@ -424,15 +351,15 @@
       "name": "Can Claude answer questions about earlier meetings?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes. Once Air Note is connected, Claude can use your saved meetings, messages and ideas as context when answering questions, writing plans or helping you follow up."
+        "text": "Yes. Once your Claude connection is set up, Claude can answer from your recorded meetings and notes in any chat, without you pasting anything in."
       }
     },
     {
       "@type": "Question",
-      "name": "What can I send through WhatsApp?",
+      "name": "Can I send messages to Air Note?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "You can message a thought, send a voice note or forward something important. Air Note captures it so the information is ready when you need it later."
+        "text": "Not yet. Forwarding messages and voice notes to a private Air Note number is on the way, and it is not part of the app today."
       }
     },
     {
@@ -449,6 +376,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
-<script src="app.js?v=4"></script>
+<script src="app.js?v=5"></script>
 </body>
 </html>
