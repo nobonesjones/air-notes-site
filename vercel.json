@@ -7,7 +7,19 @@
     { "source": "/.well-known/oauth-protected-resource/mcp", "destination": "https://pukxgbtwamgifdjhyckb.supabase.co/functions/v1/mcp-server/.well-known/oauth-protected-resource" }
   ],
   "headers": [
-    { "source": "/mcp/authorize", "headers": [ { "key": "Content-Type", "value": "text/html; charset=utf-8" } ] },
-    { "source": "/mcp/authorize/complete", "headers": [ { "key": "Content-Type", "value": "text/html; charset=utf-8" } ] }
+    {
+      "source": "/mcp/authorize",
+      "headers": [
+        { "key": "Content-Type", "value": "text/html; charset=utf-8" },
+        { "key": "Content-Security-Policy", "value": "default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; connect-src 'self'; base-uri 'none'; form-action 'none'" }
+      ]
+    },
+    {
+      "source": "/mcp/authorize/open",
+      "headers": [
+        { "key": "Content-Type", "value": "text/html; charset=utf-8" },
+        { "key": "Content-Security-Policy", "value": "default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; connect-src 'self'; base-uri 'none'; form-action 'none'" }
+      ]
+    }
   ]
 }
