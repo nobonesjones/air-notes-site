@@ -119,7 +119,7 @@
   }
   seedFlow();
   addEventListener('resize', seedFlow);
-  // Fraunces arrives after first paint and reflows the headline, moving
+  // Web fonts arrive after first paint and reflow the headline, moving
   // the subtitle and button — re-measure once the real fonts are in, and again
   // on full load as a belt-and-braces pass.
   addEventListener('load', seedFlow);

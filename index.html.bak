@@ -1,0 +1,454 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Air Note | Capture meetings, voice notes and ideas for Claude</title>
+<meta name="description" content="Air Note captures meetings, voice notes, ideas and messages in one place, then turns them into useful context for Claude.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Air Note | Bring your whole world into Claude">
+<meta property="og:description" content="Capture meetings, voice notes, ideas and messages in one place, then turn them into useful context for Claude.">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Air Note | Bring your whole world into Claude">
+<meta name="twitter:description" content="Capture meetings, voice notes, ideas and messages in one place, then turn them into useful context for Claude.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;1,9..144,400&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=4">
+</head>
+<body>
+
+<!-- atmosphere -->
+<div class="sky" id="sky" aria-hidden="true"></div>
+<canvas id="contextFlow" aria-hidden="true"></canvas>
+<div class="aurora" id="aurora" aria-hidden="true"><i class="a1"></i><i class="a2"></i><i class="a3"></i></div>
+<div class="grain" id="grain" aria-hidden="true"></div>
+
+<!-- nav -->
+<nav class="nav" aria-label="Main">
+  <a class="wordmark" href="#top">Air Note</a>
+  <a class="nav-cta" href="#signup" data-signup-open>Get early access</a>
+</nav>
+
+<main id="top">
+
+  <!-- ================= ACT I — HERO ================= -->
+  <header class="hero" id="hero">
+    <div class="wrap">
+      <div class="hero-copy">
+        <h1 id="h1">Bring your whole world into Claude.</h1>
+        <p class="sub reveal d2">Capture meetings, voice notes, and ideas and turn them into useful context so Claude knows what you know.</p>
+        <div class="cta-row reveal d3">
+          <a class="btn btn-cream magnetic" href="#signup" data-signup-open>Get early access<span class="sweep"></span></a>
+        </div>
+      </div>
+
+      <div class="phone-wrap levitate reveal d3">
+        <div class="phone" role="img" aria-label="Air Note app showing your captures organised into the Today feed">
+          <span class="island"></span>
+          <div class="screen">
+            <!-- state 1: Today feed -->
+            <div class="pscreen active" data-state="feed">
+              <div class="p-day-title">Today</div>
+              <div class="p-date">Friday 18 July · 4 captures</div>
+              <div class="p-card">
+                <div class="t"><b>Meeting with Toby: offplan stock</b><time>2:41 pm</time></div>
+                <p>Handover moves to the 24th; plans due Friday.</p>
+                <div class="p-chips"><span class="chip ochre">Savills</span><span class="chip slate">Toby</span><span class="p-min">18 min</span></div>
+              </div>
+              <div class="p-card">
+                <div class="t"><b>Idea: pricing page</b><time>11:20 am</time></div>
+                <p>Anchor annual. Trial copy: free for friends.</p>
+              </div>
+              <div class="p-card">
+                <div class="t"><b>WhatsApp from Zofia</b><time>9:04 am</time></div>
+                <p>Contract notes forwarded in.</p>
+              </div>
+              <div class="p-askbar">
+                <span>Ask anything</span>
+                <span class="p-rec"><svg fill="none" stroke-width="1.8" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3" stroke-linecap="round"/></svg></span>
+              </div>
+            </div>
+            <!-- state 2: processed recording -->
+            <div class="pscreen" data-state="processed">
+              <div class="p-proc-title">Meeting with Toby: offplan stock</div>
+              <div class="p-meta">Friday 18 July · 2:41 pm · 18 min</div>
+              <div class="p-chips"><span class="chip ochre">Savills</span><span class="chip slate">Toby</span></div>
+              <div class="p-tldr">Handover confirmed for the 24th. Revised floor plans to Toby before Friday; deposit terms unchanged.</div>
+              <div class="p-sec">Decisions</div>
+              <div class="p-li">• Handover moves to the 24th</div>
+              <div class="p-li">• Keys through the agency</div>
+              <div class="p-sec">Next steps</div>
+              <div class="p-li">• Send revised floor plans by Fri</div>
+              <div class="p-li">• Confirm handover time</div>
+              <div class="p-share">Share</div>
+            </div>
+            <!-- state 3: ask-anything answer -->
+            <div class="pscreen" data-state="ask">
+              <div class="p-day-title" style="font-size:19px">Ask</div>
+              <div class="p-q">What did Toby ask me to send?</div>
+              <div class="p-a">The revised floor plans before Friday. From your handover call on the 18th. Deposit terms stay as agreed.</div>
+              <div class="p-src">Sources</div>
+              <div class="p-chips"><span class="chip ochre">Handover call · 18 Jul</span><span class="chip slate">Site visit · 15 Jul</span></div>
+              <div class="p-askbar"><span>Ask another question…</span><span class="p-rec"><svg fill="none" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 19V6M6 12l6-6 6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="clouds" aria-hidden="true"><i class="c1"></i><i class="c2"></i><i class="c3"></i></div>
+  </header>
+
+  <!-- ================= ACT II — DAY ================= -->
+  <div class="act2" id="act2">
+    <div class="wrap act2-grid">
+      <div class="benefit-col">
+
+        <section class="benefit" id="s1" data-phone="processed">
+          <p class="eyebrow reveal d1">Capture real life as it happens.</p>
+          <h2 class="reveal d2">Walk out with every detail. Write nothing down.</h2>
+          <p class="copy reveal d3">Tap record and give the conversation your full attention. Air Note turns it into clear notes, decisions and next steps, ready to use the moment the meeting ends.</p>
+          <div class="phone-inline reveal d3">
+            <div class="phone" role="img" aria-label="A processed recording with its title, summary, decisions and next steps ready to share">
+              <span class="island"></span>
+              <div class="screen">
+                <div class="pscreen active">
+                  <div class="p-proc-title">Meeting with Toby: offplan stock</div>
+                  <div class="p-meta">Friday 18 July · 2:41 pm · 18 min</div>
+                  <div class="p-chips"><span class="chip ochre">Savills</span><span class="chip slate">Toby</span></div>
+                  <div class="p-tldr">Handover confirmed for the 24th. Revised floor plans to Toby before Friday.</div>
+                  <div class="p-sec">Next steps</div>
+                  <div class="p-li">• Send revised floor plans by Fri</div>
+                  <div class="p-li">• Confirm handover time</div>
+                  <div class="p-share">Share</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="benefit" id="s2" data-phone="feed">
+          <h2 class="reveal d1">Send anything to one place.</h2>
+          <p class="copy reveal d2">Message a thought. Send a voice note from the car. Forward the important stuff. Air Note captures it all through WhatsApp, so nothing gets lost before Claude can use it.</p>
+          <div class="chat-card reveal d3" role="img" aria-label="A chat with Air Note: a forwarded thought and a voice note, each confirmed as captured and filed">
+            <div class="bub out">meeting with toby moved to tuesday</div>
+            <div class="bub in-b"><span class="tick">Captured ✓</span> and filed to Savills</div>
+            <div class="bub out voice">
+              <svg width="14" height="14" fill="none" stroke="#44603F" stroke-width="1.8" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              <span class="bars"><i style="height:6px"></i><i style="height:12px"></i><i style="height:9px"></i><i style="height:14px"></i><i style="height:7px"></i><i style="height:11px"></i><i style="height:5px"></i><i style="height:9px"></i></span>
+              <span style="font-size:12px;opacity:.7">0:42</span>
+            </div>
+            <div class="bub in-b"><span class="tick">Captured ✓</span> and added to today</div>
+          </div>
+        </section>
+
+        <section class="benefit" id="s3" data-phone="ask">
+          <h2 class="reveal d1">Give Claude the context it was missing.</h2>
+          <p class="copy reveal d2">Connect Air Note to Claude once. Your meetings, messages and ideas become context it can use to answer questions, write plans and help you move work forward.</p>
+          <div class="chat-card reveal d3" role="img" aria-label="A question answered from your own captures, with the source recordings shown beneath">
+            <div class="bub out">What did Toby ask me to send?</div>
+            <div class="bub in-b">The revised floor plans before Friday. From your handover call on the 18th. Deposit terms stay as agreed.</div>
+            <div class="src-chips"><span class="chip ochre">Handover call · 18 Jul</span><span class="chip slate">Site visit · 15 Jul</span></div>
+          </div>
+        </section>
+
+      </div>
+
+      <div class="phone-col" aria-hidden="true">
+        <div class="phone-wrap">
+          <div class="phone">
+            <span class="island"></span>
+            <div class="screen" id="stickyScreen">
+              <div class="pscreen active" data-state="feed">
+                <div class="p-day-title">Today</div>
+                <div class="p-date">Friday 18 July · 4 captures</div>
+                <div class="p-card">
+                  <div class="t"><b>Meeting with Toby: offplan stock</b><time>2:41 pm</time></div>
+                  <p>Handover moves to the 24th; plans due Friday.</p>
+                  <div class="p-chips"><span class="chip ochre">Savills</span><span class="chip slate">Toby</span><span class="p-min">18 min</span></div>
+                </div>
+                <div class="p-card">
+                  <div class="t"><b>Idea: pricing page</b><time>11:20 am</time></div>
+                  <p>Anchor annual. Trial copy: free for friends.</p>
+                </div>
+                <div class="p-askbar">
+                  <span>Ask anything</span>
+                  <span class="p-rec"><svg fill="none" stroke-width="1.8" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3" stroke-linecap="round"/></svg></span>
+                </div>
+              </div>
+              <div class="pscreen" data-state="processed">
+                <div class="p-proc-title">Meeting with Toby: offplan stock</div>
+                <div class="p-meta">Friday 18 July · 2:41 pm · 18 min</div>
+                <div class="p-chips"><span class="chip ochre">Savills</span><span class="chip slate">Toby</span></div>
+                <div class="p-tldr">Handover confirmed for the 24th. Revised floor plans to Toby before Friday; deposit terms unchanged.</div>
+                <div class="p-sec">Decisions</div>
+                <div class="p-li">• Handover moves to the 24th</div>
+                <div class="p-li">• Keys through the agency</div>
+                <div class="p-sec">Next steps</div>
+                <div class="p-li">• Send revised floor plans by Fri</div>
+                <div class="p-li">• Confirm handover time</div>
+                <div class="p-share">Share</div>
+              </div>
+              <div class="pscreen" data-state="ask">
+                <div class="p-day-title" style="font-size:19px">Ask</div>
+                <div class="p-q">What did Toby ask me to send?</div>
+                <div class="p-a">The revised floor plans before Friday. From your handover call on the 18th. Deposit terms stay as agreed.</div>
+                <div class="p-src">Sources</div>
+                <div class="p-chips"><span class="chip ochre">Handover call · 18 Jul</span><span class="chip slate">Site visit · 15 Jul</span></div>
+                <div class="p-askbar"><span>Ask another question…</span><span class="p-rec"><svg fill="none" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 19V6M6 12l6-6 6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- pull-quote -->
+    <div class="wrap pullquote-block">
+      <p class="pullquote reveal d1">Claude can only help with what it knows. <span class="mark">Air Note gives it the rest.</span></p>
+    </div>
+
+    <!-- proof strip -->
+    <section class="proof">
+      <div class="wrap">
+        <div class="strip">
+          <div class="stat reveal d1"><div class="num"><span data-count="3">0</span><small>sec</small></div><div class="lbl">to capture a thought</div></div>
+          <div class="stat reveal d2"><div class="num"><span data-count="0">0</span><small>bots</small></div><div class="lbl">joining your calls</div></div>
+          <div class="stat reveal d3"><div class="num"><span data-count="1">0</span><small>place</small></div><div class="lbl">for Claude context</div></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ================= ACT III — DUSK CTA ================= -->
+  <section class="cta" id="cta">
+    <div class="wrap">
+      <h2 class="reveal d1">Give Claude the full picture.</h2>
+      <div class="cta-card reveal d2">
+        <button type="button" class="btn btn-cream magnetic cta-start" data-signup-open>Get early access<span class="sweep"></span></button>
+        <p class="cta-micro">Free for early users. iPhone first.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= RESOURCE HUB ================= -->
+  <section class="resources" id="resources" aria-labelledby="resources-title">
+    <div class="wrap">
+      <div class="resource-head">
+        <div>
+          <p class="eyebrow reveal d1">Explore Air Note</p>
+          <h2 class="reveal d2" id="resources-title">A clearer way to capture and use what matters.</h2>
+        </div>
+        <p class="resource-summary reveal d3">Air Note brings the details scattered across conversations, voice notes and messages into one useful memory for you and Claude.</p>
+      </div>
+
+      <nav class="resource-groups reveal d2" aria-label="Air Note resources">
+        <div class="resource-group">
+          <h3>Capture</h3>
+          <a href="#s1"><strong>Meeting notes</strong><span>Record conversations and leave with the details, decisions and next steps.</span></a>
+          <a href="#s2"><strong>Voice notes and ideas</strong><span>Save thoughts as soon as they happen, wherever you are.</span></a>
+        </div>
+        <div class="resource-group">
+          <h3>Connect</h3>
+          <a href="#s2"><strong>WhatsApp capture</strong><span>Forward messages, send thoughts and keep important voice notes together.</span></a>
+          <a href="#s3"><strong>Claude context</strong><span>Turn what you capture into context Claude can use in your work.</span></a>
+        </div>
+        <div class="resource-group">
+          <h3>Learn</h3>
+          <a href="blog/meeting-notes-without-a-bot.html"><strong>Meeting notes without a bot</strong><span>A practical guide to capturing decisions without adding another attendee.</span></a>
+          <a href="blog/claude-context-from-meetings.html"><strong>Build better Claude context</strong><span>Turn meetings, messages and ideas into context Claude can actually use.</span></a>
+          <a href="blog/index.html"><strong>The Air Note Journal</strong><span>Read practical ideas for building a more useful working memory.</span></a>
+        </div>
+      </nav>
+    </div>
+  </section>
+
+  <section class="faq" id="faq" aria-labelledby="faq-title">
+    <div class="wrap faq-layout">
+      <div class="faq-intro">
+        <p class="eyebrow reveal d1">Frequently asked questions</p>
+        <h2 class="reveal d2" id="faq-title">The short version.</h2>
+      </div>
+      <div class="faq-list">
+        <article class="faq-item reveal d1" id="faq-what">
+          <h3>What does Air Note do?</h3>
+          <p>Air Note captures meetings, voice notes, ideas and messages in one place. It organizes those details into useful context you can bring into Claude.</p>
+        </article>
+        <article class="faq-item reveal d1" id="faq-meetings">
+          <h3>How do I capture a meeting without a bot?</h3>
+          <p>Open Air Note and tap record while the conversation is happening. Air Note creates clear notes, decisions and next steps without adding another attendee to the call.</p>
+        </article>
+        <article class="faq-item reveal d1" id="faq-claude">
+          <h3>Can Claude answer questions about earlier meetings?</h3>
+          <p>Yes. Once Air Note is connected, Claude can use your saved meetings, messages and ideas as context when answering questions, writing plans or helping you follow up.</p>
+        </article>
+        <article class="faq-item reveal d1" id="faq-whatsapp">
+          <h3>What can I send through WhatsApp?</h3>
+          <p>You can message a thought, send a voice note or forward something important. Air Note captures it so the information is ready when you need it later.</p>
+        </article>
+        <article class="faq-item reveal d1" id="faq-access">
+          <h3>When is Air Note available?</h3>
+          <p>Air Note is currently inviting early users, with iPhone access first. Join the early access list to hear when your place is ready.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-main">
+      <div class="footer-brand">
+        <a href="#top">Air Note</a>
+        <p>Your conversations and ideas, ready for Claude.</p>
+      </div>
+      <nav class="footer-nav" aria-label="Footer">
+        <a href="#s1">Meetings</a>
+        <a href="#s2">WhatsApp</a>
+        <a href="#s3">Claude context</a>
+        <a href="blog/index.html">Blog</a>
+        <a href="#faq">Questions</a>
+        <a href="#signup" data-signup-open>Early access</a>
+      </nav>
+    </div>
+    <div class="footer-bottom">
+      <a class="footer-est" href="admin/index.html">Est. 2026</a>
+      <a href="#top">Back to top <span aria-hidden="true">↑</span></a>
+    </div>
+  </div>
+</footer>
+
+<div class="signup-modal" id="signup" aria-hidden="true">
+  <div class="signup-backdrop" data-signup-close></div>
+  <section class="signup-dialog" role="dialog" aria-modal="true" aria-labelledby="signupTitle" tabindex="-1">
+    <div class="signup-celebration" id="signupCelebration" aria-hidden="true"></div>
+    <button class="signup-close" type="button" data-signup-close aria-label="Close signup">×</button>
+    <div class="signup-progress" aria-hidden="true"><span id="signupProgress"></span></div>
+    <p class="signup-kicker" id="signupStepLabel">A few quick questions · 1 of 5</p>
+    <form id="signupForm" novalidate>
+      <div class="signup-step is-active" data-step="gender">
+        <h2 id="signupTitle">First, how do you describe yourself?</h2>
+        <p>This helps us understand who our early audience is.</p>
+        <div class="choice-grid">
+          <button type="button" class="choice" data-field="gender" data-value="Male">Male</button>
+          <button type="button" class="choice" data-field="gender" data-value="Female">Female</button>
+          <button type="button" class="choice" data-field="gender" data-value="Non-binary">Non-binary</button>
+          <button type="button" class="choice" data-field="gender" data-value="Prefer not to say">Prefer not to say</button>
+        </div>
+      </div>
+
+      <div class="signup-step" data-step="age_range">
+        <h2>What’s your age range?</h2>
+        <p>Choose the closest fit.</p>
+        <div class="choice-grid choice-grid--three">
+          <button type="button" class="choice" data-field="age_range" data-value="18–24">18–24</button>
+          <button type="button" class="choice" data-field="age_range" data-value="25–34">25–34</button>
+          <button type="button" class="choice" data-field="age_range" data-value="35–44">35–44</button>
+          <button type="button" class="choice" data-field="age_range" data-value="45–54">45–54</button>
+          <button type="button" class="choice" data-field="age_range" data-value="55+">55+</button>
+          <button type="button" class="choice" data-field="age_range" data-value="Prefer not to say">Prefer not to say</button>
+        </div>
+      </div>
+
+      <div class="signup-step" data-step="work_role">
+        <h2>Which best describes your work?</h2>
+        <p>We’ll shape the first version around the people using it.</p>
+        <div class="choice-grid">
+          <button type="button" class="choice" data-field="work_role" data-value="Founder or business owner">Founder or business owner</button>
+          <button type="button" class="choice" data-field="work_role" data-value="Sales or client services">Sales or client services</button>
+          <button type="button" class="choice" data-field="work_role" data-value="Manager or team lead">Manager or team lead</button>
+          <button type="button" class="choice" data-field="work_role" data-value="Independent professional">Independent professional</button>
+          <button type="button" class="choice choice--wide" data-field="work_role" data-value="Something else">Something else</button>
+        </div>
+      </div>
+
+      <div class="signup-step" data-step="primary_use_case">
+        <h2>What would you most like Air Note to remember?</h2>
+        <p>Pick the one that matters most right now.</p>
+        <div class="choice-grid">
+          <button type="button" class="choice" data-field="primary_use_case" data-value="In-person meetings">In-person meetings</button>
+          <button type="button" class="choice" data-field="primary_use_case" data-value="Calls and online meetings">Calls and online meetings</button>
+          <button type="button" class="choice" data-field="primary_use_case" data-value="Voice notes and ideas">Voice notes and ideas</button>
+          <button type="button" class="choice" data-field="primary_use_case" data-value="Messages and follow-ups">Messages and follow-ups</button>
+        </div>
+      </div>
+
+      <div class="signup-step" data-step="email">
+        <h2>Where should we send your invite?</h2>
+        <p>You’re one step away. Air Note is launching on iPhone first.</p>
+        <label class="signup-label" for="signupEmail">Email address</label>
+        <input class="signup-email" type="email" id="signupEmail" name="email" placeholder="you@work.com" autocomplete="email" required>
+        <label class="signup-consent"><input type="checkbox" id="signupConsent" required> <span>I’d like early access updates from Air Note.</span></label>
+        <p class="signup-error" id="signupError" role="alert"></p>
+        <button type="submit" class="btn signup-submit" id="signupSubmit">Join the early access list</button>
+      </div>
+
+      <div class="signup-success" id="signupSuccess" aria-live="polite">
+        <span class="signup-success-mark">✓</span>
+        <h2>You’re on the list.</h2>
+        <p>Thanks for helping shape Air Note. We’ll be in touch when your place is ready.</p>
+        <button type="button" class="btn signup-submit" data-signup-close>Done</button>
+      </div>
+    </form>
+    <div class="signup-footer" id="signupFooter">
+      <button type="button" class="signup-back" id="signupBack" disabled>Back</button>
+      <span>Your answers stay private.</span>
+    </div>
+  </section>
+</div>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What does Air Note do?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Air Note captures meetings, voice notes, ideas and messages in one place. It organizes those details into useful context you can bring into Claude."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I capture a meeting without a bot?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Open Air Note and tap record while the conversation is happening. Air Note creates clear notes, decisions and next steps without adding another attendee to the call."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can Claude answer questions about earlier meetings?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Once Air Note is connected, Claude can use your saved meetings, messages and ideas as context when answering questions, writing plans or helping you follow up."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What can I send through WhatsApp?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You can message a thought, send a voice note or forward something important. Air Note captures it so the information is ready when you need it later."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "When is Air Note available?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Air Note is currently inviting early users, with iPhone access first. Join the early access list to hear when your place is ready."
+      }
+    }
+  ]
+}
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="app.js?v=4"></script>
+</body>
+</html>
