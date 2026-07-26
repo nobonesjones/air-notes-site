@@ -464,6 +464,11 @@ body.signup-open { overflow: hidden; }
 .stat .num { font-family: var(--serif); font-size: clamp(2.2rem, 4vw, 3.4rem); color: var(--ink); line-height: 1; font-variant-numeric: tabular-nums; }
 .stat .num small { font-size: .45em; color: var(--body); margin-left: 4px; }
 .stat .lbl { font-size: 14px; color: var(--body); margin-top: 8px; }
+/* label-only proof points — no number, so the serif carries the weight */
+.stat--phrase .phrase {
+  font-family: var(--serif); font-size: clamp(1.25rem, 2.1vw, 1.7rem);
+  color: var(--ink); line-height: 1.2;
+}
 
 /* ============================================================
    ACT III — dusk CTA
