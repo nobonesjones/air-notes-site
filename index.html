@@ -34,7 +34,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=5">
+<link rel="stylesheet" href="styles.css?v=7">
 </head>
 <body>
 
@@ -47,7 +47,7 @@
 <!-- nav -->
 <nav class="nav" aria-label="Main">
   <a class="wordmark" href="#top">Air Note</a>
-  <a class="nav-cta" href="#signup" data-signup-open>Get early access</a>
+  <a class="nav-cta" href="#get-app" data-qr-open>Get the app</a>
 </nav>
 
 <main id="top">
@@ -59,7 +59,7 @@
         <h1 id="h1">Record Everything Effortlessly</h1>
         <p class="sub reveal d2">Capture meetings, voice notes and ideas and connect them to Claude seamlessly.</p>
         <div class="cta-row reveal d3">
-          <a class="btn btn-cream magnetic" href="#signup" data-signup-open>Get early access<span class="sweep"></span></a>
+          <a class="btn btn-cream magnetic" href="#get-app" data-qr-open>Get the app<span class="sweep"></span></a>
         </div>
       </div>
 
@@ -194,8 +194,8 @@
     <div class="wrap">
       <h2 class="reveal d1">Record your next meeting.</h2>
       <div class="cta-card reveal d2">
-        <button type="button" class="btn btn-cream magnetic cta-start" data-signup-open>Get early access<span class="sweep"></span></button>
-        <p class="cta-micro">Free for early users. iPhone first.</p>
+        <button type="button" class="btn btn-cream magnetic cta-start" data-qr-open>Get the app<span class="sweep"></span></button>
+        <p class="cta-micro">Coming soon on iPhone. Free for early users.</p>
       </div>
     </div>
   </section>
@@ -280,7 +280,10 @@
       </nav>
     </div>
     <div class="footer-bottom">
-      <span class="footer-est">Est. 2026</span>
+      <!-- Doubles as the way in to the early-access dashboard. Deliberately
+           undecorated: it should read as the footer's date, not as a link, so
+           it isn't an invitation to everyone who scrolls this far. -->
+      <a class="footer-est" href="signup-dashboard.html" title="Early access dashboard">Est. 2026</a>
       <nav class="footer-legal" aria-label="Legal">
         <a href="terms.html">Terms of use</a>
         <a href="privacy.html">Privacy</a>
@@ -370,6 +373,23 @@
   </section>
 </div>
 
+<!-- Get the app — QR. Pre-launch the code resolves to the early-access deep
+     link so a desktop scan lands on the phone with signup already open. At
+     launch, regenerate assets/qr-airnote.svg against the App Store URL and
+     swap the copy below. -->
+<div class="qr-modal" id="get-app" aria-hidden="true">
+  <div class="qr-backdrop" data-qr-close></div>
+  <section class="qr-dialog" role="dialog" aria-modal="true" aria-labelledby="qrTitle" tabindex="-1">
+    <button class="qr-close" type="button" data-qr-close aria-label="Close">×</button>
+    <div class="qr-panel">
+      <img src="assets/qr-airnote.svg" width="240" height="240" alt="QR code that opens airnoteapp.com, where you can join the early access list." decoding="async">
+    </div>
+    <p class="qr-kicker" id="qrTitle">Coming soon</p>
+    <p class="qr-copy">Air Note is launching on iPhone. Scan the code to open it on your phone, or join the early access list to hear the moment it goes live.</p>
+    <button type="button" class="btn qr-cta" data-qr-to-signup>Join the early access list</button>
+  </section>
+</div>
+
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -421,6 +441,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
-<script src="app.js?v=5"></script>
+<script src="app.js?v=6"></script>
 </body>
 </html>

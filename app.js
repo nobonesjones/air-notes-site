@@ -520,6 +520,62 @@
     else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
   });
 
+  /* ---------- get the app — QR modal ---------- */
+  const qrModal = $('#get-app');
+  if (qrModal) {
+    const qrDialog = $('.qr-dialog', qrModal);
+    let qrPreviousFocus = null;
+
+    function openQr(event) {
+      event?.preventDefault();
+      const trigger = event?.currentTarget;
+      launchBurst(trigger);
+      trigger?.classList.add('cta-launching');
+      setTimeout(() => trigger?.classList.remove('cta-launching'), 720);
+      qrPreviousFocus = document.activeElement;
+      qrModal.classList.add('is-open');
+      qrModal.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('qr-open');
+      requestAnimationFrame(() => qrDialog.focus({ preventScroll: true }));
+    }
+
+    function closeQr({ restoreFocus = true } = {}) {
+      qrModal.classList.remove('is-open');
+      qrModal.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('qr-open');
+      if (restoreFocus) qrPreviousFocus?.focus?.();
+    }
+
+    $$('[data-qr-open]').forEach(trigger => trigger.addEventListener('click', openQr));
+    $$('[data-qr-close]').forEach(trigger => trigger.addEventListener('click', () => closeQr()));
+
+    // Hand off to the early-access flow. Skip the focus restore on the way out —
+    // openSignup claims focus itself, and returning it to a now-hidden trigger
+    // first would bounce the screen reader out of the dialog it's opening.
+    $$('[data-qr-to-signup]').forEach(trigger => trigger.addEventListener('click', () => {
+      closeQr({ restoreFocus: false });
+      openSignup();
+    }));
+
+    document.addEventListener('keydown', event => {
+      if (!qrModal.classList.contains('is-open')) return;
+      if (event.key === 'Escape') { closeQr(); return; }
+      if (event.key !== 'Tab') return;
+      const focusable = $$('button:not([disabled]), a[href]', qrModal).filter(el => el.offsetParent !== null);
+      if (!focusable.length) return;
+      const first = focusable[0], last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+    });
+  }
+
+  /* The QR resolves to /#signup, so a scan lands on the phone with the
+     early-access flow already open rather than on a static page. Called
+     directly rather than via requestAnimationFrame: rAF does not fire while a
+     tab is in the background, which is exactly where a freshly-scanned link
+     can open. */
+  if (location.hash === '#signup') openSignup();
+
   /* re-measure anchors once fonts/layout settle */
   addEventListener('load', () => { measure(); seedFlow(); });
   document.fonts?.ready.then(() => { measure(); seedFlow(); });
