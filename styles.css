@@ -681,13 +681,18 @@ body.qr-open { overflow: hidden; }
 }
 .qr-panel img { display: block; width: 240px; height: 240px; max-width: 100%; height: auto; aspect-ratio: 1; }
 
-.qr-kicker { font-family: var(--sans); font-size: 13px; font-weight: 600; letter-spacing: .08em; color: var(--cream); margin: 0 0 8px; }
+.qr-kicker { font-family: var(--sans); font-size: 12px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: rgba(245,241,230,.55); margin: 0 0 10px; }
+/* The modal says the same thing the hero says — same headline, same subline —
+   so arriving here doesn't read as a different product. Scaled down to sit
+   under a QR panel rather than lead a page. */
+.qr-title { font-family: var(--display); font-size: 25px; line-height: 1.15; letter-spacing: -.02em; color: var(--cream); margin: 0 0 10px; }
 .qr-copy { font-family: var(--sans); font-size: 14.5px; line-height: 1.55; color: rgba(245,241,230,.72); margin: 0 0 22px; }
 .qr-cta { background: var(--cream); color: var(--night); width: 100%; box-shadow: 0 10px 30px rgba(0,0,0,.3); }
 .qr-cta:hover { transform: translateY(-2px); }
 
 @media (max-width: 480px) {
   .qr-dialog { padding: 30px 22px 26px; border-radius: 24px; }
+  .qr-title { font-size: 22px; }
   .qr-panel { padding: 14px; }
   .qr-panel img { width: 200px; }
 }
