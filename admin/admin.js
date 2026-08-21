@@ -221,12 +221,25 @@
           await afterAuth(data.user);
         }
       } catch (err) {
-        // Vague on purpose: a precise "no such account" turns this into a way
-        // to test which addresses exist.
-        showAuthMessage(
-          sentTo ? "That code was not recognised. It may have expired." : "We couldn’t send a code to that address.",
-          "warn"
-        );
+        // A 429 on the send step does not mean the send failed — Supabase
+        // rate-limits to one code a minute, so it means a code went out moments
+        // ago and is already sitting in their inbox. Reporting that as "we
+        // couldn't send to that address" sends them hunting for a problem that
+        // isn't there, which is exactly what it did.
+        const rateLimited =
+          err && (err.status === 429 || /after \d+ seconds/i.test(err.message || ""));
+        if (!sentTo && rateLimited) {
+          sentTo = email.value.trim();
+          setStage("code");
+          showAuthMessage("A code was sent a moment ago — check your email.", "ok");
+        } else {
+          // Otherwise stay vague: a precise "no such account" turns this into a
+          // way to test which addresses exist.
+          showAuthMessage(
+            sentTo ? "That code was not recognised. It may have expired." : "We couldn’t send a code to that address.",
+            "warn"
+          );
+        }
       } finally {
         btn.disabled = false;
         if (btn.textContent === "Sending…" || btn.textContent === "Logging in…") btn.textContent = label;
