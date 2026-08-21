@@ -163,53 +163,73 @@
     route();
   }
 
+  // Sign-in is the six-digit code the rest of Air Note uses. This asked for a
+  // password, which no account has — every user is created by code — so the
+  // form could never succeed. It also offered public sign-up from an admin URL:
+  // that never granted access (afterAuth still checks is_admin) but it did let
+  // anyone who found this page put a row in auth.users. Both are gone.
   function wireLogin() {
     const form = $("#login-form");
     const email = $("#f-email");
-    const pass = $("#f-pass");
-    let mode = "login"; // or "signup"
+    const code = $("#f-code");
+    const btn = $("#login-submit");
+    const again = $("#toggle-mode");
+    let sentTo = null;
 
-    $("#toggle-mode").addEventListener("click", (e) => {
+    const setStage = (stage) => {
+      const sent = stage === "code";
+      $("#f-code-field").classList.toggle("hidden", !sent);
+      again.classList.toggle("hidden", !sent);
+      email.readOnly = sent;
+      btn.textContent = sent ? "Log in" : "Email me a code";
+      if (sent) code.focus();
+    };
+
+    again.addEventListener("click", (e) => {
       e.preventDefault();
-      mode = mode === "login" ? "signup" : "login";
-      $("#login-submit").textContent = mode === "login" ? "Log in" : "Sign up";
-      $("#toggle-mode").textContent =
-        mode === "login" ? "Need an account? Sign up" : "Have an account? Log in";
-      showAuthMessage("", "");
+      sentTo = null; code.value = ""; showAuthMessage("", "");
+      setStage("email"); email.focus();
     });
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
       if (!sb) return;
-      const btn = $("#login-submit");
       btn.disabled = true;
       showAuthMessage("", "");
+      const label = btn.textContent;
       try {
-        if (mode === "signup") {
-          const { error } = await sb.auth.signUp({
+        if (!sentTo) {
+          btn.textContent = "Sending…";
+          // shouldCreateUser:false — an unknown address must not become an
+          // account just because someone found this URL.
+          const { error } = await sb.auth.signInWithOtp({
             email: email.value.trim(),
-            password: pass.value,
+            options: { shouldCreateUser: false },
           });
           if (error) throw error;
-          showAuthMessage(
-            "Account created. If email confirmation is on, confirm then log in.",
-            "ok"
-          );
-          // Note: signing up does not grant access — afterAuth still checks is_admin.
-          const { data } = await sb.auth.getSession();
-          if (data && data.session) await afterAuth(data.session.user);
+          sentTo = email.value.trim();
+          setStage("code");
+          showAuthMessage("Code sent. Check your email.", "ok");
         } else {
-          const { data, error } = await sb.auth.signInWithPassword({
-            email: email.value.trim(),
-            password: pass.value,
+          btn.textContent = "Logging in…";
+          const { data, error } = await sb.auth.verifyOtp({
+            email: sentTo,
+            token: code.value.trim(),
+            type: "email",
           });
           if (error) throw error;
           await afterAuth(data.user);
         }
       } catch (err) {
-        showAuthMessage(err.message || "Something went wrong.", "warn");
+        // Vague on purpose: a precise "no such account" turns this into a way
+        // to test which addresses exist.
+        showAuthMessage(
+          sentTo ? "That code was not recognised. It may have expired." : "We couldn’t send a code to that address.",
+          "warn"
+        );
       } finally {
         btn.disabled = false;
+        if (btn.textContent === "Sending…" || btn.textContent === "Logging in…") btn.textContent = label;
       }
     });
 

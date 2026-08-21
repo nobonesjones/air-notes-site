@@ -14,7 +14,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="admin.css?v=2">
+<link rel="stylesheet" href="admin.css?v=3">
 </head>
 <body>
 
@@ -33,13 +33,13 @@
         <span>Email</span>
         <input id="f-email" type="email" autocomplete="email" required>
       </label>
-      <label class="field">
-        <span>Password</span>
-        <input id="f-pass" type="password" autocomplete="current-password" required>
+      <label class="field hidden" id="f-code-field">
+        <span>Six-digit code</span>
+        <input id="f-code" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}">
       </label>
-      <button id="login-submit" type="submit" class="btn-primary">Log in</button>
+      <button id="login-submit" type="submit" class="btn-primary">Email me a code</button>
     </form>
-    <button id="toggle-mode" class="link-btn">Need an account? Sign up</button>
+    <button id="toggle-mode" class="link-btn hidden">Use a different email</button>
     <div id="auth-msg" class="auth-msg hidden"></div>
     <button id="back-home" class="link-btn subtle">← Back to site</button>
   </div>
@@ -78,6 +78,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
-<script src="admin.js?v=2"></script>
+<script src="admin.js?v=3"></script>
 </body>
 </html>
