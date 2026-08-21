@@ -191,9 +191,16 @@
       setStage("email"); email.focus();
     });
 
+    // Guard the form, not the button. Disabling the button stops a second
+    // click but not a second submit — pressing Enter in a field submits the
+    // form whatever state the button is in, and two sends land the user a 429
+    // alongside their code.
+    let inFlight = false;
+
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
-      if (!sb) return;
+      if (!sb || inFlight) return;
+      inFlight = true;
       btn.disabled = true;
       showAuthMessage("", "");
       const label = btn.textContent;
@@ -241,6 +248,7 @@
           );
         }
       } finally {
+        inFlight = false;
         btn.disabled = false;
         if (btn.textContent === "Sending…" || btn.textContent === "Logging in…") btn.textContent = label;
       }
