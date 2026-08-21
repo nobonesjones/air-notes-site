@@ -136,14 +136,17 @@
   async function afterAuth(user) {
     show("loading");
     // Dashboard access is gated on is_admin — NOT on merely having an account.
+    //
+    // Asked via the RPC, not by selecting from profiles: that table has RLS on
+    // with no policies at all, so the select returned nothing for everyone and
+    // even a real admin was told they weren't one. current_user_is_admin() is
+    // SECURITY DEFINER and is already what the early-access RLS policies call,
+    // so this reuses the existing answer rather than opening profiles up to
+    // read just to ask a question about one column.
     let isAdmin = false;
     try {
-      const { data, error } = await sb
-        .from(cfg.tables.profiles)
-        .select(cfg.columns.isAdmin)
-        .eq(cfg.columns.profileId, user.id)
-        .single();
-      if (!error && data) isAdmin = data[cfg.columns.isAdmin] === true;
+      const { data, error } = await sb.rpc("current_user_is_admin");
+      if (!error) isAdmin = data === true;
     } catch (e) {
       isAdmin = false;
     }
