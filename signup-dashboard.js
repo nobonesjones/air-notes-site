@@ -31,6 +31,7 @@
     if (signupError || eventError) {
       await client.auth.signOut();
       loginError.textContent = 'This account is not approved for dashboard access.';
+      codeSentTo = null; setStage('email');
       login.hidden = false; dashboard.hidden = true; return;
     }
     submissions = signupData || [];
@@ -44,12 +45,54 @@
     login.hidden = true; dashboard.hidden = false;
   }
 
+  // Sign-in is the same six-digit code the app uses. It used to ask for a
+  // password, which nobody had — every Air Note account is created by code, so
+  // signInWithPassword had nothing to match and the only way in was to invent a
+  // credential in Supabase first. One flow, and no password to lose.
+  let codeSentTo = null;
+
+  const setStage = stage => {
+    const sent = stage === 'code';
+    $('#codeField').hidden = !sent;
+    $('#adminEmail').readOnly = sent;
+    $('#useAnotherEmail').hidden = !sent;
+    $('#loginSubmit').textContent = sent ? 'Sign in' : 'Email me a code';
+    $('#loginHint').textContent = sent
+      ? `Enter the code we sent to ${codeSentTo}.`
+      : 'We’ll email you a six-digit code.';
+    if (sent) $('#adminCode').focus();
+  };
+
+  $('#useAnotherEmail').addEventListener('click', () => {
+    codeSentTo = null; $('#adminCode').value = ''; loginError.textContent = '';
+    setStage('email'); $('#adminEmail').focus();
+  });
+
   loginForm.addEventListener('submit', async event => {
     event.preventDefault(); loginError.textContent = '';
-    const button = loginForm.querySelector('button'); button.disabled = true; button.textContent = 'Signing in…';
-    const { error } = await client.auth.signInWithPassword({ email:$('#adminEmail').value.trim(), password:$('#adminPassword').value });
-    button.disabled = false; button.textContent = 'Sign in';
-    if (error) { loginError.textContent = 'Email or password not recognised.'; return; }
+    const button = $('#loginSubmit');
+    const email = $('#adminEmail').value.trim();
+    const label = button.textContent;
+    button.disabled = true;
+
+    if (!codeSentTo) {
+      button.textContent = 'Sending…';
+      // shouldCreateUser:false — this is an admin door, so an unknown address
+      // must not quietly become an account.
+      const { error } = await client.auth.signInWithOtp({ email, options:{ shouldCreateUser:false } });
+      button.disabled = false; button.textContent = label;
+      // Deliberately vague: a precise "no such account" here would let anyone
+      // test which addresses exist.
+      if (error) { loginError.textContent = 'We couldn’t send a code to that address.'; return; }
+      codeSentTo = email; setStage('code');
+      return;
+    }
+
+    button.textContent = 'Signing in…';
+    const token = $('#adminCode').value.trim();
+    const { error } = await client.auth.verifyOtp({ email: codeSentTo, token, type:'email' });
+    button.disabled = false; button.textContent = label;
+    if (error) { loginError.textContent = 'That code was not recognised. It may have expired.'; return; }
     loadDashboard();
   });
   $('#signOut').addEventListener('click', async () => { await client.auth.signOut(); location.reload(); });

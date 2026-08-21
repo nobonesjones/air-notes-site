@@ -14,7 +14,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="signup-dashboard.css">
+<link rel="stylesheet" href="signup-dashboard.css?v=2">
 </head>
 <body>
   <main class="dashboard-shell">
@@ -22,14 +22,17 @@
       <a class="dashboard-brand" href="index.html">Air Note</a>
       <p class="eyebrow">Private dashboard</p>
       <h1>Early access signups</h1>
-      <p>Sign in with an approved Air Note admin account.</p>
+      <p id="loginHint">We’ll email you a six-digit code.</p>
       <form id="loginForm">
         <label for="adminEmail">Email address</label>
         <input id="adminEmail" type="email" autocomplete="email" required>
-        <label for="adminPassword">Password</label>
-        <input id="adminPassword" type="password" autocomplete="current-password" required>
+        <div id="codeField" hidden>
+          <label for="adminCode">Six-digit code</label>
+          <input id="adminCode" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}">
+        </div>
         <p class="form-error" id="loginError" role="alert"></p>
-        <button type="submit">Sign in</button>
+        <button type="submit" id="loginSubmit">Email me a code</button>
+        <button type="button" class="linky" id="useAnotherEmail" hidden>Use a different email</button>
       </form>
     </section>
 
@@ -59,6 +62,6 @@
   </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
-<script src="signup-dashboard.js"></script>
+<script src="signup-dashboard.js?v=2"></script>
 </body>
 </html>

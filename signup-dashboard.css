@@ -20,6 +20,13 @@ button { cursor:pointer; }
 .login-card>p:not(.eyebrow) { margin:0; font-size:14px; line-height:1.5; }
 .login-card form { gap:6px; margin-top:20px; }
 .login-card input, .login-card form button { height:44px; }
+/* The code field is wrapped in a div so it can be hidden as a unit, which
+   takes it out of the form's grid flow — restore the spacing its siblings get. */
+.login-card #codeField { display:grid; }
+/* A text button under the primary action: a way back to the email step, not a
+   second thing to press. */
+.linky { height:auto!important; margin-top:2px; padding:6px; border:0; background:none; color:var(--muted); font-size:13px; text-decoration:underline; }
+.linky:hover { color:var(--ink); }
 .dashboard-brand { color:var(--navy); font:400 20px var(--display); text-decoration:none; }
 .eyebrow { margin:32px 0 8px; color:var(--muted); font-size:12px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; }
 h1 { margin:0 0 10px; color:var(--ink); font:400 clamp(2.2rem,5vw,3.4rem)/1.05 var(--display); }
