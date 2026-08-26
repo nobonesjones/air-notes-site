@@ -621,11 +621,16 @@
     async function loadOnboarding() {
       const since = daysAgoISO(parseInt(range, 10));
       const { data, error } = await sb.from(cfg.tables.analytics)
-        .select("user_id,event_name,created_at").gte("created_at", since).limit(50000);
+        .select("user_id,anon_id,event_name,created_at").gte("created_at", since).limit(50000);
       if (error) throw error;
       const rows = data || [];
+      // Count by user where we have one, device otherwise. The first two stages
+      // happen before anyone signs in, so counting user_id alone would report
+      // zero for the two steps the funnel is measured against — making every
+      // later stage look like an infinite conversion rate.
+      const who = (row) => row.user_id || row.anon_id;
       return onboardingStages.map((stage) => ({ ...stage, count:
-        unique(rows, (row) => stage.keys.includes(row.event_name), (row) => row.user_id)
+        unique(rows, (row) => stage.keys.includes(row.event_name), who)
       }));
     }
 
