@@ -324,82 +324,147 @@
   }
 
   // ---- page: Home ----------------------------------------------------------
+  // Air Note shipped on 17 Aug 2026. Everything before that is our own testing
+  // and App Review's, which is why "Since launch" is the default range rather
+  // than all time — filtering those out by email address would also hide every
+  // real user who signs in with Apple, since they share the same private-relay
+  // domain as the reviewers.
+  const LAUNCH_ISO = "2026-08-17T00:00:00.000Z";
+
+  const HOME_RANGES = [
+    ["launch", "Since launch"],
+    ["30", "30 days"],
+    ["7", "7 days"],
+    ["all", "All time"],
+  ];
+
+  function rangeStartISO(range) {
+    if (range === "all") return null;
+    if (range === "launch") return LAUNCH_ISO;
+    return daysAgoISO(Number(range));
+  }
+
   async function renderHome(main) {
-    main.appendChild(pageTitle("Home", "A quick pulse on real users and activity."));
+    const head = el("div", "funnel-page-head");
+    head.appendChild(pageTitle("Home", "Real users and real activity."));
+
+    let range = "launch";
+    const rangeSeg = el("div", "seg funnel-range");
+    const rangeButtons = HOME_RANGES.map(([value, label]) => {
+      const button = el("button", "seg-btn" + (value === range ? " active" : ""), label);
+      button.type = "button";
+      button.addEventListener("click", () => {
+        if (range === value) return;
+        range = value;
+        rangeButtons.forEach((item) => item.classList.toggle("active", item === button));
+        load();
+      });
+      rangeSeg.appendChild(button);
+      return button;
+    });
+    head.appendChild(rangeSeg);
+    main.appendChild(head);
 
     const grid = el("div", "kpi-grid");
     main.appendChild(grid);
-    const card = (label) => {
+    const cards = {};
+    const card = (key, label) => {
       const c = el("div", "kpi-card");
       c.appendChild(el("div", "kpi-label", label));
       const v = el("div", "kpi-value skeleton", "");
       c.appendChild(v);
       grid.appendChild(c);
+      cards[key] = v;
       return v;
     };
 
-    const vUsers = card("Total users");
-    const vCaptures = card("Total captures");
-    const v7 = card("New signups · 7 days");
-    const v30 = card("New signups · 30 days");
+    card("users", "New users");
+    card("active", "Users who recorded");
+    card("recordings", "Recordings");
+    card("perUser", "Recordings per active user");
 
-    // Total users
-    countRows(cfg.tables.profiles).then((n) => setStat(vUsers, n));
-
-    // Total captures
-    resolveCaptureTable().then(async (t) => {
-      if (!t) { setStat(vCaptures, null); return; }
-      setStat(vCaptures, await countRows(t));
-    });
-
-    // New signups — needs a created_at on profiles; probe once.
-    signupsSince(7).then((n) => setStat(v7, n));
-    signupsSince(30).then((n) => setStat(v30, n));
-
-    // Active users today — only if analytics_events exists & has data.
-    if (await hasAnalytics()) {
-      const v = card("Active users today");
-      try {
-        const { data, error } = await sb
-          .from(cfg.tables.analytics)
-          .select("user_id")
-          .gte("created_at", startOfTodayISO());
-        if (error) throw error;
-        const uniq = new Set((data || []).map((r) => r.user_id).filter(Boolean));
-        setStat(v, uniq.size);
-      } catch (e) {
-        setStat(v, null);
-      }
-    }
-
-    // Recent signups list (best-effort).
     const recent = el("div", "panel");
     recent.appendChild(el("h2", "panel-title", "Recent signups"));
+    const recentBody = el("div");
+    recent.appendChild(recentBody);
     main.appendChild(recent);
-    try {
+
+    async function load() {
+      Object.values(cards).forEach((node) => {
+        node.className = "kpi-value skeleton";
+        node.textContent = "";
+      });
+      const since = rangeStartISO(range);
       const createdKey = await profilesCreatedKey();
-      let q = sb.from(cfg.tables.profiles).select("*").limit(8);
-      if (createdKey) q = q.order(createdKey, { ascending: false });
-      const { data, error } = await q;
-      if (error) throw error;
-      if (!data || !data.length) {
-        recent.appendChild(el("p", "muted", "No profiles yet."));
+
+      // New users in range.
+      setStat(
+        cards.users,
+        createdKey
+          ? await countRows(cfg.tables.profiles, (q) => (since ? q.gte(createdKey, since) : q))
+          : null
+      );
+
+      // Recordings, and how many distinct people made them. One read serves
+      // both — counting users separately would be a second pass over the same
+      // rows for no benefit at this size.
+      const table = await resolveCaptureTable();
+      if (!table) {
+        setStat(cards.recordings, null);
+        setStat(cards.active, null);
+        setStat(cards.perUser, null);
       } else {
-        const list = el("div", "mini-list");
-        data.forEach((r) => {
-          const row = el("div", "mini-row");
-          const left = el("div");
-          left.appendChild(el("div", "mini-primary", pick(r, EMAIL_KEYS) || pick(r, NAME_KEYS) || "Unknown"));
-          left.appendChild(el("div", "mini-secondary", pick(r, NAME_KEYS) || ""));
-          row.appendChild(left);
-          row.appendChild(el("div", "mini-secondary", fmtDate(pick(r, CREATED_KEYS))));
-          list.appendChild(row);
-        });
-        recent.appendChild(list);
+        try {
+          let q = sb.from(table).select("user_id,created_at");
+          if (since) q = q.gte("created_at", since);
+          const { data, error } = await q;
+          if (error) throw error;
+          const rows = data || [];
+          const people = new Set(rows.map((r) => r.user_id).filter(Boolean));
+          setStat(cards.recordings, rows.length);
+          setStat(cards.active, people.size);
+          cards.perUser.className = "kpi-value";
+          cards.perUser.textContent = people.size
+            ? (rows.length / people.size).toFixed(1)
+            : "—";
+        } catch (e) {
+          setStat(cards.recordings, null);
+          setStat(cards.active, null);
+          setStat(cards.perUser, null);
+        }
       }
-    } catch (e) {
-      recent.appendChild(el("p", "muted", "Couldn't load recent signups."));
+
+      // Recent signups.
+      recentBody.innerHTML = "";
+      try {
+        let q = sb.from(cfg.tables.profiles).select("*").limit(8);
+        if (createdKey) {
+          q = q.order(createdKey, { ascending: false });
+          if (since) q = q.gte(createdKey, since);
+        }
+        const { data, error } = await q;
+        if (error) throw error;
+        if (!data || !data.length) {
+          recentBody.appendChild(el("p", "muted", "No signups in this range."));
+        } else {
+          const list = el("div", "mini-list");
+          data.forEach((r) => {
+            const row = el("div", "mini-row");
+            const left = el("div");
+            left.appendChild(el("div", "mini-primary", pick(r, EMAIL_KEYS) || pick(r, NAME_KEYS) || "Unknown"));
+            left.appendChild(el("div", "mini-secondary", pick(r, NAME_KEYS) || ""));
+            row.appendChild(left);
+            row.appendChild(el("div", "mini-secondary", fmtDate(pick(r, CREATED_KEYS))));
+            list.appendChild(row);
+          });
+          recentBody.appendChild(list);
+        }
+      } catch (e) {
+        recentBody.appendChild(el("p", "muted", "Couldn't load recent signups."));
+      }
     }
+
+    load();
   }
 
   let _createdKeyCache = undefined;
@@ -443,10 +508,13 @@
     head.appendChild(rangeSeg);
     main.appendChild(head);
 
+    // Early access retired: the app is on the App Store, so there is no waiting
+    // list to convert and the site no longer collects one. The historical rows
+    // are still in early_access_signups if they are ever wanted.
     const tabs = el("div", "funnel-tabs");
     tabs.setAttribute("role", "tablist");
-    let funnel = "early";
-    const tabButtons = [["early", "Early access"], ["onboarding", "App onboarding"]].map(([value, label]) => {
+    let funnel = "onboarding";
+    const tabButtons = [["onboarding", "App onboarding"]].map(([value, label]) => {
       const button = el("button", "funnel-tab" + (value === funnel ? " active" : ""), label);
       button.type = "button";
       button.setAttribute("role", "tab");
