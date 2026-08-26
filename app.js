@@ -574,7 +574,15 @@
      directly rather than via requestAnimationFrame: rAF does not fire while a
      tab is in the background, which is exactly where a freshly-scanned link
      can open. */
-  if (location.hash === '#signup') openSignup();
+  // The early-access flow has no entry point any more — the app shipped, so
+  // every CTA goes to the App Store. Old links and any QR still in the wild
+  // pointed here, so send them where they were trying to go.
+  // (The modal markup and its handlers are now unreachable; removing them
+  // means unpicking ~130 lines whose listeners are unguarded, so that is a
+  // separate tidy-up rather than a change to make in passing.)
+  if (location.hash === '#signup') {
+    location.replace('https://apps.apple.com/app/id6793366926');
+  }
 
   /* re-measure anchors once fonts/layout settle */
   addEventListener('load', () => { measure(); seedFlow(); });

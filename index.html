@@ -34,7 +34,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=8">
+<link rel="stylesheet" href="styles.css?v=9">
 </head>
 <body>
 
@@ -195,7 +195,7 @@
       <h2 class="reveal d1">Record your next meeting.</h2>
       <div class="cta-card reveal d2">
         <button type="button" class="btn btn-cream magnetic cta-start" data-qr-open>Get the app<span class="sweep"></span></button>
-        <p class="cta-micro">Coming soon on iPhone. Free for early users.</p>
+        <p class="cta-micro">Out now on iPhone. Free to start.</p>
       </div>
     </div>
   </section>
@@ -276,7 +276,7 @@
         <a href="#s3">Claude</a>
         <a href="blog/index.html">Blog</a>
         <a href="#faq">Questions</a>
-        <a href="#signup" data-signup-open>Early access</a>
+        <a href="https://apps.apple.com/app/id6793366926" target="_blank" rel="noopener">Download</a>
       </nav>
     </div>
     <div class="footer-bottom">
@@ -373,21 +373,20 @@
   </section>
 </div>
 
-<!-- Get the app — QR. Pre-launch the code resolves to the early-access deep
-     link so a desktop scan lands on the phone with signup already open. At
-     launch, regenerate assets/qr-airnote.svg against the App Store URL and
-     swap the copy below. -->
+<!-- Get the app — QR. The code resolves to the App Store listing, so a scan
+     from a desktop lands on the phone ready to install. Regenerate
+     assets/qr-airnote.svg if that URL ever changes. -->
 <div class="qr-modal" id="get-app" aria-hidden="true">
   <div class="qr-backdrop" data-qr-close></div>
   <section class="qr-dialog" role="dialog" aria-modal="true" aria-labelledby="qrTitle" tabindex="-1">
     <button class="qr-close" type="button" data-qr-close aria-label="Close">×</button>
     <div class="qr-panel">
-      <img src="assets/qr-airnote.svg" width="240" height="240" alt="QR code that opens airnoteapp.com, where you can join the early access list." decoding="async">
+      <img src="assets/qr-airnote.svg" width="240" height="240" alt="QR code that opens Air Note on the App Store." decoding="async">
     </div>
-    <p class="qr-kicker">Coming soon</p>
+    <p class="qr-kicker">Out now on iPhone</p>
     <h2 class="qr-title" id="qrTitle">Record Everything Effortlessly</h2>
-    <p class="qr-copy">Capture meetings, voice notes and ideas and connect them to Claude seamlessly.</p>
-    <button type="button" class="btn qr-cta" data-qr-to-signup>Join the early access list</button>
+    <p class="qr-copy">Scan to install Air Note, or open the App Store on this device.</p>
+    <a class="btn qr-cta" href="https://apps.apple.com/app/id6793366926" target="_blank" rel="noopener">Download on the App Store</a>
   </section>
 </div>
 
@@ -442,6 +441,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
-<script src="app.js?v=6"></script>
+<script src="app.js?v=7"></script>
 </body>
 </html>
