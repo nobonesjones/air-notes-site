@@ -162,7 +162,7 @@
     $("#who").textContent = user.email || "admin";
     $("#who-avatar").textContent = (user.email || "A").charAt(0).toUpperCase();
     show("app");
-    if (!location.hash) location.hash = "#/home";
+    if (!location.hash) location.hash = "#/analytics";
     route();
   }
 
@@ -415,11 +415,14 @@
         setStat(cards.perUser, null);
       } else {
         try {
-          let q = sb.from(table).select("user_id,created_at");
+          let q = sb.from(table).select("user_id,created_at,type,welcome:meta->welcome").limit(10000);
           if (since) q = q.gte("created_at", since);
           const { data, error } = await q;
           if (error) throw error;
-          const rows = data || [];
+          // Every new account is seeded a welcome note stored as a 'recording'
+          // (air-note migration 20260725120000). Counted, it made "users who
+          // recorded" equal to "new users". Only real recordings count.
+          const rows = (data || []).filter((r) => r.type === "recording" && r.welcome !== true);
           const people = new Set(rows.map((r) => r.user_id).filter(Boolean));
           setStat(cards.recordings, rows.length);
           setStat(cards.active, people.size);
@@ -881,102 +884,12 @@
     }
   }
 
-  // ---- page: User Analytics ------------------------------------------------
-  async function renderAnalytics(main) {
-    main.appendChild(pageTitle("User analytics", "Product-wide event activity."));
-
-    if (!(await hasAnalytics())) {
-      const panel = el("div", "panel");
-      panel.appendChild(el("p", "muted", "The analytics_events table isn't set up or has no data yet. Run docs/supabase-admin-setup.sql and start sending events."));
-      main.appendChild(panel);
-      return;
-    }
-
-    const controls = el("div", "controls");
-    const seg = el("div", "seg");
-    let range = "30";
-    const segBtns = [["7", "7 days"], ["30", "30 days"], ["90", "90 days"], ["3650", "All time"]].map(([v, label]) => {
-      const b = el("button", "seg-btn" + (v === range ? " active" : ""), label);
-      b.type = "button";
-      b.addEventListener("click", () => {
-        if (range === v) return;
-        range = v;
-        segBtns.forEach((x) => x.classList.toggle("active", x === b));
-        load();
-      });
-      seg.appendChild(b);
-      return b;
-    });
-    controls.appendChild(seg);
-    main.appendChild(controls);
-
-    const kpis = el("div", "kpi-grid");
-    main.appendChild(kpis);
-    const panel = el("div", "panel");
-    panel.appendChild(el("h2", "panel-title", "Top events"));
-    const holder = el("div");
-    panel.appendChild(holder);
-    main.appendChild(panel);
-
-    async function load() {
-      kpis.innerHTML = "";
-      holder.innerHTML = "<p class='muted'>Loading…</p>";
-      const days = parseInt(range, 10);
-      let rows = [];
-      try {
-        const { data, error } = await sb
-          .from(cfg.tables.analytics)
-          .select("event_name,user_id,created_at")
-          .gte("created_at", daysAgoISO(days))
-          .limit(50000);
-        if (error) throw error;
-        rows = data || [];
-      } catch (e) {
-        holder.innerHTML = "<p class='muted'>Couldn't load events.</p>";
-        return;
-      }
-
-      const totalEvents = rows.length;
-      const dau = new Set(rows.filter((r) => r.created_at >= startOfTodayISO()).map((r) => r.user_id).filter(Boolean)).size;
-      const wau = new Set(rows.filter((r) => r.created_at >= daysAgoISO(7)).map((r) => r.user_id).filter(Boolean)).size;
-
-      const kpi = (label, val) => {
-        const c = el("div", "kpi-card");
-        c.appendChild(el("div", "kpi-label", label));
-        const v = el("div", "kpi-value", "");
-        animateCount(v, val);
-        c.appendChild(v);
-        kpis.appendChild(c);
-      };
-      kpi("Total events", totalEvents);
-      kpi("DAU (today)", dau);
-      kpi("WAU (7 days)", wau);
-
-      // Top events by count.
-      const counts = {};
-      rows.forEach((r) => { counts[r.event_name] = (counts[r.event_name] || 0) + 1; });
-      const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 15);
-      holder.innerHTML = "";
-      if (!sorted.length) { holder.appendChild(el("p", "muted", "No events in this range.")); return; }
-      const max = sorted[0][1];
-      sorted.forEach(([name, n]) => {
-        const row = el("div", "bar-row");
-        row.appendChild(el("div", "bar-label", name));
-        const track = el("div", "bar-track");
-        const fill = el("div", "bar-fill");
-        // Start at 0 and set the real width a frame later so the CSS
-        // transition sweeps the bar in.
-        const target = Math.max(4, (n / max) * 100) + "%";
-        fill.style.width = "0%";
-        requestAnimationFrame(() => requestAnimationFrame(() => { fill.style.width = target; }));
-        track.appendChild(fill);
-        row.appendChild(track);
-        row.appendChild(el("div", "bar-value", String(n)));
-        holder.appendChild(row);
-      });
-    }
-
-    load();
+  // ---- page: Analytics ---------------------------------------------------
+  // Lives in analytics.js; this only hands it the client and the config.
+  function renderAnalytics(main) {
+    let saved = null;
+    try { saved = localStorage.getItem("airnote-admin-period"); } catch (e) { /* private mode */ }
+    return window.AdminAnalytics.render(main, sb, cfg, saved);
   }
 
   // ---- shared bits ---------------------------------------------------------

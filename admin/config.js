@@ -29,6 +29,10 @@ window.ADMIN_CONFIG = {
     captureCandidates: ["captures", "meetings", "notes", "recordings", "transcripts"],
   },
 
+  // Accounts left out of every analytics number: App Review's demo login and
+  // any of our own test accounts. Add an address here to drop it everywhere.
+  internalEmails: ["appreview@airnoteapp.com"],
+
   columns: {
     profileId: "id",       // profiles PK, equals auth.users.id
     isAdmin: "is_admin",
