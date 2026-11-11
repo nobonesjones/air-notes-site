@@ -605,6 +605,13 @@ body.signup-open { overflow: hidden; }
 .footer-main { display: flex; justify-content: space-between; align-items: flex-start; gap: 60px; padding-bottom: 64px; }
 .footer-brand > a { color: var(--ink); font-family: var(--display); font-size: 28px; line-height: 1; text-decoration: none; }
 .footer-brand p { margin-top: 13px; color: var(--muted); font-size: 13.5px; }
+/* Parent-company credit. `.footer-brand > a` is the wordmark rule, so the
+   sizes are reset here to sit quietly under the tagline. */
+.footer-brand > a.footer-anno {
+  display: inline-block; margin-top: 22px; font-family: inherit; font-size: 12.5px; line-height: 1.4;
+  color: var(--muted); transition: color .25s var(--ease);
+}
+.footer-brand > a.footer-anno:hover { color: var(--accent); }
 .footer-nav { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 14px 32px; max-width: 560px; }
 .footer-nav a, .footer-bottom a { color: var(--body); font-size: 14px; text-decoration: none; transition: color .25s var(--ease); }
 .footer-nav a:hover, .footer-bottom a:hover { color: var(--accent); }
